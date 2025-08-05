@@ -3,302 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>【2025年最新】楽天レディースファッション・リアル売れ筋TOP10</title>
+    <title>暮らしセレクト - データで選ぶ、賢い選択</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Noto Sans JP', sans-serif;
             background-color: #FDFBF8; /* Warm Neutral: Background */
             color: #4B423A; /* Warm Neutral: Text */
         }
+        .font-display {
+            font-family: 'Playfair Display', serif;
+        }
         .bg-primary { background-color: #A88767; }
         .text-primary { color: #A88767; }
         .border-primary { border-color: #A88767; }
         .bg-accent { background-color: #8B7E74; }
-        .border-accent { border-color: #8B7E74; }
-        .ring-primary { ring-color: #A88767; }
         .transition-all { transition: all 0.3s ease-in-out; }
-        .transform-gpu { transform: translateZ(0); }
         .card-shadow { box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        .card-shadow-hover:hover { box-shadow: 0 8px 25px rgba(75, 66, 58, 0.1); }
-        .chart-container { position: relative; height: 450px; width: 100%;}
+        .card-shadow-hover:hover { 
+            box-shadow: 0 10px 30px rgba(75, 66, 58, 0.1);
+            transform: translateY(-5px);
+        }
     </style>
 </head>
 <body class="antialiased">
 
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
 
-        <header class="text-center mb-12 md:mb-20">
-            <h1 class="text-3xl md:text-5xl font-bold text-primary mb-2">夏の選択</h1>
-            <p class="text-lg md:text-xl text-gray-600">データで読み解く、楽天「本当に売れてる」レディースファッションTOP10</p>
+        <header class="text-center mb-16 md:mb-20">
+            <h1 class="font-display text-5xl md:text-7xl font-bold text-primary mb-3">Kurashi Select</h1>
+            <p class="text-lg md:text-xl text-gray-600">データと実体験で、あなたの「最高の選択」をナビゲートします。</p>
         </header>
 
-        <section id="intro" class="max-w-3xl mx-auto text-center mb-16 md:mb-24">
-            <h2 class="text-2xl md:text-3xl font-bold mb-4">賢い買い物は、情報から。</h2>
-            <p class="text-base md:text-lg leading-relaxed">
-                「みんなが何を買っているの？」「本当に良い商品はどれ？」夏のファッション選びは、選択肢が多すぎて迷ってしまいます。このガイドでは、楽天市場の最新ランキングデータを基に、「価格」「レビュー評価」「人気度（レビュー数）」を徹底分析。あなたの価値観に合った最高の1着を見つけるための、インタラクティブな旅にご案内します。
-            </p>
-        </section>
-
-        <section id="chart-analysis" class="mb-16 md:mb-24">
-            <div class="max-w-4xl mx-auto text-center mb-8">
-                <h2 class="text-2xl md:text-3xl font-bold mb-4">ランキングの全体像：人気と価格のマップ</h2>
+        <main>
+            <div class="max-w-4xl mx-auto text-center mb-12">
+                <h2 class="text-2xl md:text-3xl font-bold mb-4">最新の特集記事</h2>
                 <p class="text-base md:text-lg leading-relaxed">
-                    まずは、TOP10にランクインした商品がどのような評価を得ているのか見てみましょう。下のグラフは、横軸が「価格」、縦軸が「レビュー評価」、そして円の大きさが「レビュー数（人気の証明）」を示しています。<strong>右上にあり、円が大きい商品ほど「価格に見合った高い評価と絶大な人気を誇る」</strong>アイテムと言えます。
+                    日々の暮らしを豊かにする、厳選された情報をお届けします。気になるテーマをクリックして、インタラクティブな体験をお楽しみください。
                 </p>
             </div>
-            <div class="bg-white p-4 sm:p-6 md:p-8 rounded-2xl card-shadow max-w-4xl mx-auto">
-                <div class="chart-container">
-                    <canvas id="productsChart"></canvas>
-                </div>
-            </div>
-        </section>
 
-        <section id="interactive-selection" class="mb-16 md:mb-24">
-            <div class="max-w-3xl mx-auto text-center mb-12">
-                <h2 class="text-2xl md:text-3xl font-bold mb-4">あなたの選択：何を基準に選びますか？</h2>
-                <p class="text-base md:text-lg leading-relaxed mb-8">
-                    価値観は人それぞれ。あなたの探し方に合わせて、商品をご紹介します。下のボタンから、あなたの考えに近い方を選んでください。
-                </p>
-                <div class="flex flex-col sm:flex-row justify-center gap-4">
-                    <button id="btn-sort-rank" class="w-full sm:w-auto bg-primary text-white font-bold py-3 px-8 rounded-full transition-all transform-gpu hover:scale-105 card-shadow-hover ring-2 ring-offset-2 ring-primary">
-                        👑 人気ランキング順
-                    </button>
-                    <button id="btn-sort-price" class="w-full sm:w-auto bg-accent text-white font-bold py-3 px-8 rounded-full transition-all transform-gpu hover:scale-105 card-shadow-hover">
-                        💰 価格が安い順
-                    </button>
-                    <button id="btn-sort-review" class="w-full sm:w-auto bg-accent text-white font-bold py-3 px-8 rounded-full transition-all transform-gpu hover:scale-105 card-shadow-hover">
-                        ⭐ 評価が高い順
-                    </button>
-                </div>
-            </div>
+            <!-- Articles Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10 max-w-6xl mx-auto">
 
-            <div id="results-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-                <!-- 商品カードがここに動的に挿入されます -->
+                <!-- Article Card 1 -->
+                <a href="./article/series001/001-001.html" class="block bg-white rounded-2xl card-shadow card-shadow-hover transition-all">
+                    <div class="p-6">
+                        <p class="text-sm text-primary font-bold mb-2">FASHION</p>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3 h-20">【2025年最新】楽天レディースファッション・リアル売れ筋TOP10</h3>
+                        <p class="text-sm text-gray-600 leading-relaxed">
+                            データで読み解く「本当に売れてる」アイテム。価格・レビュー・人気度を分析し、あなたの価値観に合う最高の1着を見つけます。
+                        </p>
+                    </div>
+                    <div class="bg-gray-50 px-6 py-4 rounded-b-2xl">
+                        <span class="font-bold text-primary">記事を読む &rarr;</span>
+                    </div>
+                </a>
+
+                <!-- Article Card 2 -->
+                <a href="./article/series002/002-001.html" class="block bg-white rounded-2xl card-shadow card-shadow-hover transition-all">
+                    <div class="p-6">
+                        <p class="text-sm text-blue-600 font-bold mb-2">LIFESTYLE</p>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3 h-20">【2025年版】大人の体型カバー水着、再定義</h3>
+                        <p class="text-sm text-gray-600 leading-relaxed">
+                            体型の悩みに寄り添い、自信を持って夏を楽しむための選択肢。アクティブ派もオシャレ派も満足できる賢い選び方をご提案します。
+                        </p>
+                    </div>
+                    <div class="bg-gray-50 px-6 py-4 rounded-b-2xl">
+                        <span class="font-bold text-blue-600">記事を読む &rarr;</span>
+                    </div>
+                </a>
+
+                <!-- Article Card 3 -->
+                <a href="./article/series003/003-001.html" class="block bg-white rounded-2xl card-shadow card-shadow-hover transition-all">
+                     <div class="p-6">
+                        <p class="text-sm text-accent font-bold mb-2">GADGET</p>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3 h-20">【LDKベストバイ】MonomamスマートウォッチPrimo インタラクティブレビュー</h3>
+                        <p class="text-sm text-gray-600 leading-relaxed">
+                            『LDK』が認めた圧倒的コスパ。有名ブランドとの比較や本当に使える機能を、あなたの知りたいことに合わせて解説します。
+                        </p>
+                    </div>
+                    <div class="bg-gray-50 px-6 py-4 rounded-b-2xl">
+                        <span class="font-bold text-accent">記事を読む &rarr;</span>
+                    </div>
+                </a>
+
             </div>
-        </section>
-        
-        <section id="conclusion" class="max-w-3xl mx-auto text-center mt-12">
-             <h2 class="text-2xl md:text-3xl font-bold mb-4">最終的な結論</h2>
-             <div id="recommendation-text" class="bg-white p-6 md:p-8 rounded-2xl card-shadow text-left leading-relaxed">
-                <p class="font-bold text-lg mb-3">2025年夏のトレンドは「高機能・体型カバー・高コスパ」</p>
-                <p>ランキング全体を見ると、単にお洒落なだけでなく、<strong>UVカットや接触冷感などの「機能性」</strong>、そして気になる部分を隠せる<strong>「体型カバー力」</strong>を兼ね備えたアイテムが圧倒的な支持を集めていることがわかります。特に、1,000円〜2,000円台の価格帯で驚くほどの高機能を実現したUVパーカーやルームウェアは、賢い消費者が選ぶ鉄板アイテムと言えるでしょう。</p>
-                <p class="mt-4">あなたが何を重視するかにかかわらず、このTOP10の中には必ず満足できる一着があります。ぜひ、この夏の最高のパートナーを見つけてください。</p>
-             </div>
-        </section>
+        </main>
+
+        <footer class="text-center mt-20 md:mt-24">
+            <p class="text-sm text-gray-500">&copy; 2025 kurashi-select.github.io. All Rights Reserved.</p>
+        </footer>
 
     </div>
-
-    <script>
-        const productsData = [
-          {
-            "rank": 1, "itemName": "＼18％OFFクーポン／UV パーカー 冷感 -7℃", "itemPrice": 1980, "reviewCount": 13633, "reviewAverage": 4.33, "affiliateUrl": "https://hb.afl.rakuten.co.jp/hgc/g00tgx3k.qgo2xc2d.g00tgx3k.qgo2y170/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fnityukan0715%2Fqqdou7009a%2F&rafcid=wsc_i_ra_1014243036473883403",
-            "imageUrl": "https://thumbnail.image.rakuten.co.jp/@0_mall/nityukan0715/cabinet/10771143/chenai4t_01n.jpg?_ex=128x128", "catchcopy": "紫外線遮蔽率99％！軽やかな冷感素材で快適キープ", "description": "栄えある第1位。UPF50+、接触冷感、通気性、取り外し可能なサンバイザーまで備えた「着る日焼け止め」。圧倒的な機能性と1万件を超えるレビュー数がその実力を証明しています。夏のあらゆるシーンで活躍する最強の一枚です。"
-          },
-          {
-            "rank": 2, "itemName": "【クーポン利用】体型カバー水着5点セット", "itemPrice": 7580, "reviewCount": 568, "reviewAverage": 4.23, "affiliateUrl": "https://hb.afl.rakuten.co.jp/hgc/g00qqehk.qgo2x195.g00qqehk.qgo2ye8e/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Ftouhuzi%2Fvikir5189%2F&rafcid=wsc_i_ra_1014243036473883403",
-            "imageUrl": "https://thumbnail.image.rakuten.co.jp/@0_mall/touhuzi/cabinet/aka_sam/vikir5189_os_aka20.jpg?_ex=128x128", "catchcopy": "水陸両用！ぽっちゃりさんも安心の5点セット", "description": "ラッシュガードからレギンスまで全て揃った豪華5点セット。気になる部分を完璧にカバーしつつ、スタイリッシュに見えるデザインが魅力。UVカット率も99.9%以上で、水辺のアクティビティを存分に楽しめます。"
-          },
-          {
-            "rank": 3, "itemName": "UVカット率99%以上 タンキニ水着4点セット", "itemPrice": 4780, "reviewCount": 2521, "reviewAverage": 4.26, "affiliateUrl": "https://hb.afl.rakuten.co.jp/hgc/g00r62fk.qgo2xdf0.g00r62fk.qgo2y08a/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fteddyshop%2Fhys2861%2F&rafcid=wsc_i_ra_1014243036473883403",
-            "imageUrl": "https://thumbnail.image.rakuten.co.jp/@0_mall/teddyshop/cabinet/mizugi40/hys2861x1tr_6.jpg?_ex=128x128", "catchcopy": "気負わないヘルシーコーデ！洋服みたいな水着セット", "description": "トレンドのビスチェ風デザインがお洒落な4点セット。洋服感覚で着られるので、水着に抵抗がある方にもおすすめ。長袖シャツとハーフパンツで露出を抑えつつ、しっかりと体型をカバーしてくれます。"
-          },
-          {
-            "rank": 4, "itemName": "＼先着1枚842円！／さらてろルームウェア上下セット", "itemPrice": 990, "reviewCount": 9283, "reviewAverage": 4.33, "affiliateUrl": "https://hb.afl.rakuten.co.jp/hgc/g00q8qjk.qgo2xf81.g00q8qjk.qgo2ycff/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fdarkangel%2Fto2305-1114%2F&rafcid=wsc_i_ra_1014243036473883403",
-            "imageUrl": "https://thumbnail.image.rakuten.co.jp/@0_mall/darkangel/cabinet/11667147/07/1114-main-250723-2.jpg?_ex=128x128", "catchcopy": "＼ロングセラー／リブ生地ルームウェア上下セット", "description": "肌に馴染む「さらてろ」感がやみつきになるルームウェア。裾を自分でカットできるので、どんな身長の人にもフィットします。リラックスできる着心地と可愛いデザインで、おうち時間を格上げするアイテムです。"
-          },
-          {
-            "rank": 5, "itemName": "【クーポンで2,450円】接触冷感ストライプワイドパンツ", "itemPrice": 4900, "reviewCount": 257, "reviewAverage": 4.53, "affiliateUrl": "https://hb.afl.rakuten.co.jp/hgc/g00synkk.qgo2xe94.g00synkk.qgo2y989/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fsljapan1%2Fsa9517%2F&rafcid=wsc_i_ra_1014243036473883403",
-            "imageUrl": "https://thumbnail.image.rakuten.co.jp/@0_mall/sljapan1/cabinet/07985602/sa9517/sa9517_top2.jpg?_ex=128x128", "catchcopy": "＼楽天1位！6冠達成／選べる丈のひんやりストライプパンツ", "description": "穿いた瞬間ひんやりする接触冷感素材で、夏に最適なワイドパンツ。縦のストライプ柄が脚長効果を演出し、ゆったりシルエットで体型もカバー。楽ちんなのにキレイめに見える、大人のためのカジュアルパンツです。"
-          },
-          {
-            "rank": 6, "itemName": "UVカット率99%以上 長袖ラッシュガード5点セット", "itemPrice": 4480, "reviewCount": 6803, "reviewAverage": 4.38, "affiliateUrl": "https://hb.afl.rakuten.co.jp/hgc/g00r62fk.qgo2xdf0.g00r62fk.qgo2y08a/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fteddyshop%2Fhys2128%2F&rafcid=wsc_i_ra_1014243036473883403",
-            "imageUrl": "https://thumbnail.image.rakuten.co.jp/@0_mall/teddyshop/cabinet/mizugi40/hys2128x1tr_2.jpg?_ex=128x128", "catchcopy": "しっかりカバーできる長袖＆レギンス☆動きやすさも◎", "description": "6000件以上のレビューが信頼の証。日焼け対策と体型カバーを両立したいならこの5点セットが最適。動きやすさも考慮されており、フィットネスや水中ウォーキングにも対応。幅広いサイズ展開も魅力です。"
-          },
-          {
-            "rank": 7, "itemName": "「新感覚」穿いていて疲れないデニムパンツ", "itemPrice": 2999, "reviewCount": 8145, "reviewAverage": 4.5, "affiliateUrl": "https://hb.afl.rakuten.co.jp/hgc/g00s53ck.qgo2x590.g00s53ck.qgo2yac3/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fhhh-style%2Fjp144%2F&rafcid=wsc_i_ra_1014243036473883403",
-            "imageUrl": "https://thumbnail.image.rakuten.co.jp/@0_mall/hhh-style/cabinet/50227/jp144-1.jpg?_ex=128x128", "catchcopy": "カラーver追加！トール丈も選べるストレッチデニム", "description": "本格的な見た目からは想像できないほどのストレッチ性で、一日中快適に過ごせる「疲れない」デニム。ゆったりとしたストレートシルエットが体型を拾わず、誰でも美脚見えが叶います。豊富なサイズと丈から選べるのも嬉しいポイント。"
-          },
-          {
-            "rank": 8, "itemName": "2点で完結！お腹が見えないインナー一体型水着セット", "itemPrice": 3480, "reviewCount": 372, "reviewAverage": 4.52, "affiliateUrl": "https://hb.afl.rakuten.co.jp/hgc/g00tcj3k.qgo2x72c.g00tcj3k.qgo2y354/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fdearcologne%2Fts001set%2F&rafcid=wsc_i_ra_1014243036473883403",
-            "imageUrl": "https://thumbnail.image.rakuten.co.jp/@0_mall/dearcologne/cabinet/sw/ts001set-bbb.jpg?_ex=128x128", "catchcopy": "インナーがくっついた便利なセパレート水着セット♪", "description": "着替えが面倒という悩みを解決する画期的な水着。トップスとパンツにインナーが一体化しており、着替えが非常にスムーズ。お腹が見えない設計で、小さなお子様がいるママにも安心して着用いただけます。"
-          },
-          {
-            "rank": 9, "itemName": "＼半額クーポン配布中！／完全防備UVパーカー", "itemPrice": 999, "reviewCount": 9262, "reviewAverage": 4.1, "affiliateUrl": "https://hb.afl.rakuten.co.jp/hgc/g00q8qjk.qgo2xf81.g00q8qjk.qgo2ycff/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fdarkangel%2Fotg1704-0115%2F&rafcid=wsc_i_ra_1014243036473883403",
-            "imageUrl": "https://thumbnail.image.rakuten.co.jp/@0_mall/darkangel/cabinet/11667147/07/0115-main-250722.jpg?_ex=128x128", "catchcopy": "1枚3役！UPF50+ 着たほうが涼しい、羽織る日焼け止め", "description": "1位の商品と双璧をなす人気のUVパーカー。こちらもUPF50+、接触冷感、フード、指穴付きと機能性抜群。特に価格の安さが驚異的で、コストパフォーマンスを重視するならこれ以上の選択肢はありません。"
-          },
-          {
-            "rank": 10, "itemName": "＼先着1枚1,615円〜／選べる2タイプマキシワンピース", "itemPrice": 1899, "reviewCount": 3378, "reviewAverage": 4.24, "affiliateUrl": "https://hb.afl.rakuten.co.jp/hgc/g00q8qjk.qgo2xf81.g00q8qjk.qgo2ycff/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fdarkangel%2Fop2502-4732%2F&rafcid=wsc_i_ra_1014243036473883403",
-            "imageUrl": "https://thumbnail.image.rakuten.co.jp/@0_mall/darkangel/cabinet/11667147/07/4732-main-250708-1.jpg?_ex=128x128", "catchcopy": "気分で選べる！シンプルで大人かわいいマキシワンピース", "description": "1枚でコーディネートが完成する、夏の頼れるマキシワンピース。体のラインを拾わない美しいシルエットと、さらっとしたスムースコットン素材が魅力。豊富なデザインと丈から選べるので、理想の一枚が見つかります。"
-          }
-        ];
-
-        const resultsContainer = document.getElementById('results-container');
-        const sortButtons = {
-            rank: document.getElementById('btn-sort-rank'),
-            price: document.getElementById('btn-sort-price'),
-            review: document.getElementById('btn-sort-review')
-        };
-
-        function createCard(product) {
-            return `
-                <div id="card-${product.rank}" class="bg-white rounded-2xl card-shadow card-shadow-hover transition-all transform-gpu opacity-0 translate-y-4" style="transition-delay: ${product.rank * 50}ms;">
-                    <img src="${product.imageUrl}" alt="${product.itemName}" class="rounded-t-2xl w-full h-48 object-cover">
-                    <div class="p-5">
-                        <div class="flex justify-between items-start mb-3">
-                            <div>
-                                <p class="text-xs text-gray-500">RANK ${product.rank}</p>
-                                <h3 class="font-bold text-primary leading-tight">${product.itemName}</h3>
-                            </div>
-                            <span class="text-lg font-bold text-accent whitespace-nowrap">¥${product.itemPrice.toLocaleString()}</span>
-                        </div>
-                        <div class="text-sm space-y-2 mb-4">
-                            <p class="text-gray-600">${product.catchcopy}</p>
-                            <div class="flex items-center gap-4 text-xs">
-                                <span class="bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded-full">⭐ ${product.reviewAverage}</span>
-                                <span class="text-gray-500">✍️ ${product.reviewCount.toLocaleString()}件</span>
-                            </div>
-                        </div>
-                         <div id="details-${product.rank}" class="text-sm leading-relaxed text-gray-700 bg-stone-50 p-3 rounded-lg hidden mb-4">
-                            <p>${product.description}</p>
-                        </div>
-                        <button onclick="toggleDetails(${product.rank})" class="w-full text-center text-primary font-semibold py-2 rounded-lg border-2 border-primary/30 hover:bg-primary/10 transition-colors">
-                            詳細を見る
-                        </button>
-                         <a href="${product.affiliateUrl}" target="_blank" rel="noopener noreferrer" class="block w-full text-center bg-primary text-white font-bold py-3 px-4 rounded-lg mt-3 hover:opacity-90 transition-opacity">
-                            楽天でチェック
-                        </a>
-                    </div>
-                </div>
-            `;
-        }
-
-        function displayResults(sortKey) {
-            resultsContainer.innerHTML = '';
-            
-            let sortedData = [...productsData];
-            if(sortKey === 'price') {
-                sortedData.sort((a,b) => a.itemPrice - b.itemPrice);
-            } else if (sortKey === 'review') {
-                sortedData.sort((a,b) => b.reviewAverage - a.reviewAverage);
-            } else { // rank
-                 sortedData.sort((a,b) => a.rank - b.rank);
-            }
-
-            sortedData.forEach((product, index) => {
-                // アニメーションのために一時的にランクをindexに差し替える
-                const tempProduct = {...product, rank: index + 1};
-                resultsContainer.innerHTML += createCard(tempProduct);
-            });
-            
-            setTimeout(() => {
-                sortedData.forEach((product, index) => {
-                    const card = document.getElementById(`card-${index + 1}`);
-                    if(card) {
-                        card.classList.remove('opacity-0', 'translate-y-4');
-                    }
-                });
-            }, 10);
-
-            // Update button styles
-            for (const key in sortButtons) {
-                if(key === sortKey) {
-                    sortButtons[key].classList.remove('bg-accent');
-                    sortButtons[key].classList.add('bg-primary', 'ring-2', 'ring-offset-2');
-                } else {
-                    sortButtons[key].classList.remove('bg-primary', 'ring-2', 'ring-offset-2');
-                    sortButtons[key].classList.add('bg-accent');
-                }
-            }
-        }
-
-        function toggleDetails(rank) {
-            const details = document.getElementById(`details-${rank}`);
-            const button = details.nextElementSibling;
-            details.classList.toggle('hidden');
-             if (details.classList.contains('hidden')) {
-                button.textContent = '詳細を見る';
-            } else {
-                button.textContent = '閉じる';
-            }
-        }
-
-        sortButtons.rank.addEventListener('click', () => displayResults('rank'));
-        sortButtons.price.addEventListener('click', () => displayResults('price'));
-        sortButtons.review.addEventListener('click', () => displayResults('review'));
-
-
-        // Chart.js
-        const ctx = document.getElementById('productsChart').getContext('2d');
-        const chartData = productsData.map(p => ({
-            x: p.itemPrice,
-            y: p.reviewAverage,
-            r: Math.max(5, Math.sqrt(p.reviewCount) / 10), // レビュー数を円の半径に反映（最小半径5）
-            label: `[${p.rank}位] ${p.itemName}`
-        }));
-
-        const productsChart = new Chart(ctx, {
-            type: 'bubble',
-            data: {
-                datasets: [{
-                    label: '商品',
-                    data: chartData,
-                    backgroundColor: 'rgba(168, 135, 103, 0.6)',
-                    borderColor: 'rgba(168, 135, 103, 1)',
-                    borderWidth: 1,
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                const dataPoint = context.raw;
-                                return [
-                                    `${dataPoint.label}`,
-                                    `価格: ${dataPoint.x.toLocaleString()}円`,
-                                    `評価: ${dataPoint.y}`,
-                                ];
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        title: {
-                            display: true,
-                            text: '価格（円）',
-                            font: { size: 14 }
-                        },
-                        ticks: {
-                            callback: function(value) { return value.toLocaleString() }
-                        }
-                    },
-                    y: {
-                        title: {
-                            display: true,
-                            text: 'レビュー評価',
-                            font: { size: 14 }
-                        },
-                         min: 4.0, // 評価の最小値を調整して見やすくする
-                         max: 4.6
-                    }
-                }
-            }
-        });
-
-        // Initial display
-        displayResults('rank');
-    </script>
 </body>
 </html>
