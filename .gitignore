@@ -1,0 +1,104 @@
+# Operating System Files
+.DS_Store
+Thumbs.db
+
+# Editor/IDE Specific Files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.bak
+*~
+
+# Node.js specific files (if using Node.js/npm/yarn)
+/node_modules
+/npm-debug.log*
+/yarn-debug.log*
+/yarn-error.log*
+/.pnp/
+.pnp.js
+.eslintcache
+.next/ # Next.js build output
+.nuxt/ # Nuxt.js build output
+dist/ # Common build output directory
+build/ # Another common build output directory
+out/ # Another common build output directory
+
+# Python specific files (if using Python)
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Ruby specific files (if using Ruby)
+.bundle/
+/vendor/bundle/
+.byebug_history
+.ruby-version
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+/log/
+/tmp/
+
+# dotenv environment variables
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+
+# Database files
+*.sqlite3
+*.db
+*.csv # Sometimes data files should be ignored
+
+# macOS Specific
+.Trashes
+.Spotlight-V100
+.TemporaryItems
+.fseventsd
+
+# Thumbnails
+._*
+.localized
+
+# Package files
+*.zip
+*.tar
+*.tar.gz
+*.rar
+
+# Sass/Less compiled CSS
+*.css.map
+
+# Image optimization artifacts
+*.webp
+*.avif
+*.jp2
+*.jxr
+*.tif
+*.tiff
+
+# User specific configuration files (e.g. for Jekyll or other static site generators)
+_site/ # Jekyll's default output directory
+.jekyll-cache/
+.sass-cache/
+
+# Git itself
+.git/
+.gitattributes
+.gitkeep
+
+# Custom excludes for your project (add more here as needed)
+# 例えば、画像やPDFなどの大きいファイルをGit管理しない場合
+# images/uploads/
+# docs/generated_pdfs/
