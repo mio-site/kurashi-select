@@ -1,18 +1,31 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
     <title>暮らしセレクト - データで選ぶ、賢い選択</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- SEO & Viewport Meta Tags (ご指定の内容を反映) -->
+    <meta name="description" content="暮らしの中の様々な選択を、データや実体験に基づいた客観的な情報でサポートするサイト『暮らしセレクト』のトップページです。ファッション、ライフスタイル、ガジェットなど、厳選された特集記事を掲載しています。">
+    <meta content='width=device-width,initial-scale=1.0,minimum-scale=1.0' name='viewport'/>
+
+    <!-- Icons (パスは環境に合わせて変更してください) -->
+    <link rel="icon" type="image/png" href="./icon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
+
+    <!-- Stylesheets (CSS 遅延読み込みを適用) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+
+    <!-- Scripts (defer 属性を適用) -->
+    <script defer src="https://cdn.tailwindcss.com"></script>
+
     <style>
+        /* レイアウトシフト防止のため、基本的なスタイルはインラインで記述 */
         body {
             font-family: 'Noto Sans JP', sans-serif;
-            background-color: #FDFBF8; /* Warm Neutral: Background */
-            color: #4B423A; /* Warm Neutral: Text */
+            background-color: #FDFBF8;
+            color: #4B423A;
         }
         .font-display {
             font-family: 'Playfair Display', serif;
@@ -29,7 +42,9 @@
         }
     </style>
 </head>
-<body class="antialiased">
+
+<!-- 4. 読み込み完了後にbodyを表示するため、初期状態を非表示に -->
+<body class="antialiased" style="display: none;">
 
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
 
@@ -99,5 +114,12 @@
         </footer>
 
     </div>
+
+    <!-- 4. 読み込み完了後にbodyを表示するためのスクリプト -->
+    <script>
+        window.onload = function() {
+            document.body.style.display = "block";
+        };
+    </script>
 </body>
 </html>
