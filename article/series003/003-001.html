@@ -1,15 +1,26 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
     <title>【LDKベストバイ】MonomamスマートウォッチPrimoインタラクティブレビュー</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- SEO & Viewport Meta Tags -->
+    <meta name="description" content="テストする女性誌『LDK』でベストバイを受賞したスマートウォッチ「Monomam Primo」。価格、機能、デザインを有名ブランドと比較し、本当に価値ある選択かをインタラクティブに解説します。">
+    <meta content='width=device-width,initial-scale=1.0,minimum-scale=1.0' name='viewport'/>
+
+    <!-- Icons (ルートからの相対パスで指定) -->
+    <link rel="icon" type="image/png" href="../../icon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+
+    <!-- Scripts (defer 属性を適用) -->
+    <script defer src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Stylesheets (CSS 遅延読み込みを適用) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
-    <!-- Palette: Warm Neutrals (Background: #FDFBF8, Text: #4B423A, Primary: #A88767, Accent: #8B7E74) -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    
     <style>
         body {
             font-family: 'Noto Sans JP', sans-serif;
@@ -39,7 +50,7 @@
         }
     </style>
 </head>
-<body class="antialiased">
+<body class="antialiased" style="display: none;">
 
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
 
@@ -254,6 +265,13 @@
                 }
             }
         });
+    </script>
+
+    <!-- 読み込み完了後にbodyを表示するためのスクリプト -->
+    <script>
+        window.onload = function() {
+            document.body.style.display = "block";
+        };
     </script>
 </body>
 </html>
