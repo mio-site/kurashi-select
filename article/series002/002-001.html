@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>【2025年版】大人の体型カバー水着、再定義</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #F8F9FA; /* Off-White */
+            color: #343A40; /* Dark Gray */
+        }
+        .bg-primary { background-color: #3498DB; } /* Calm Blue */
+        .text-primary { color: #3498DB; }
+        .bg-accent { background-color: #E9C46A; } /* Sand Gold */
+        .text-accent { color: #E9C46A; }
+        .border-primary { border-color: #3498DB; }
+        .transition-all { transition: all 0.3s ease-in-out; }
+        .transform-gpu { transform: translateZ(0); }
+        .card-shadow { box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .card-shadow-hover:hover { box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+
+        <header class="text-center mb-12 md:mb-20">
+            <h1 class="text-3xl md:text-5xl font-bold text-primary mb-2">大人の水着選び、再定義</h1>
+            <p class="text-lg md:text-xl text-gray-600">自信を持って、夏を楽しむための選択肢</p>
+        </header>
+
+        <section id="intro" class="max-w-3xl mx-auto text-center mb-16 md:mb-24">
+            <h2 class="text-2xl md:text-3xl font-bold mb-4">"水着"から遠ざかっていませんか？</h2>
+            <p class="text-base md:text-lg leading-relaxed">
+                子どもとの楽しい夏の思い出に、水着は欠かせないアイテム。でも、「体型が変わってしまって、昔のものは着られない…」「どんな水着を選べばいいかわからない」と感じ、水辺から足が遠のいてしまっている方も多いのではないでしょうか。このガイドは、そんな大人の女性が抱える悩みに寄り添い、賢く、そして美しく輝くための一着を見つけるお手伝いをします。
+            </p>
+        </section>
+
+        <section id="challenge" class="mb-16 md:mb-24">
+            <div class="max-w-3xl mx-auto text-center mb-8">
+                <h2 class="text-2xl md:text-3xl font-bold mb-4">悩みは、あなただけじゃない</h2>
+                <p class="text-base md:text-lg leading-relaxed">
+                    体型の悩みは人それぞれですが、実は多くの人が同じようなポイントを気にしています。下のグラフは、「水着を着る際に体型カバーしたい場所」についての一般的なアンケート結果（想定）です。多くの人が、お腹周りを筆頭に複数の箇所をカバーしたいと考えていることがわかります。
+                </p>
+            </div>
+            <div class="bg-white p-4 sm:p-6 md:p-8 rounded-2xl card-shadow max-w-2xl mx-auto">
+                <div class="chart-container relative w-full h-64 md:h-80">
+                    <canvas id="coverPointsChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="choice" class="mb-16 md:mb-24">
+            <div class="max-w-3xl mx-auto text-center mb-12">
+                <h2 class="text-2xl md:text-3xl font-bold mb-4">あなたの理想の過ごし方は？</h2>
+                <p class="text-base md:text-lg leading-relaxed mb-8">
+                    体型カバーは共通の願い。では、その上であなたは水辺で「どう過ごしたい」ですか？あなたの理想の過ごし方によって、選ぶべき水着は変わってきます。下のボタンから、あなたの理想に近いスタイルを選んでみてください。
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <button id="btn-active" class="w-full sm:w-auto bg-primary text-white font-bold py-3 px-8 rounded-full transition-all transform-gpu hover:scale-105 card-shadow-hover">
+                        UV対策重視！アクティブに動きたい
+                    </button>
+                    <button id="btn-stylish" class="w-full sm:w-auto bg-accent text-white font-bold py-3 px-8 rounded-full transition-all transform-gpu hover:scale-105 card-shadow-hover">
+                        見た目重視！とにかくオシャレに見せたい
+                    </button>
+                </div>
+            </div>
+
+            <div id="results-container" class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+            </div>
+        </section>
+        
+        <section id="conclusion" class="max-w-3xl mx-auto text-center hidden mt-12">
+             <h2 class="text-2xl md:text-3xl font-bold mb-4">あなたに最適な一着は</h2>
+             <div id="recommendation-text" class="bg-white p-6 md:p-8 rounded-2xl card-shadow text-left leading-relaxed">
+             </div>
+        </section>
+
+    </div>
+
+    <script>
+        const productData = [
+            {
+                id: 'active-1',
+                type: 'active',
+                name: 'ラッシュガード付き3点セット',
+                shop: '33ART',
+                price: '2,660円',
+                image: 'https://thumbnail.image.rakuten.co.jp/@0_mall/mimiart888/cabinet/11577963/11577981/q257-1.jpg?_ex=128x128',
+                features: ['長袖ラッシュガード', 'タンキニ＆ショーツ', '水陸両用'],
+                description: '「絶対に焼きたくない！」を叶えるラッシュガード付きセット。気になる二の腕を完全にカバーし、UV対策は万全。タンキニとショートパンツでお腹周りもさりげなく隠せます。洋服感覚で着られるので、水辺での休憩中もリラックスして過ごせます。',
+                traveler: '日焼け対策を最優先し、レジャー全般で着回したい方',
+                url: 'https://hb.afl.rakuten.co.jp/hgc/g00uey4k.qgo2x68b.g00uey4k.qgo2y8a3/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fmimiart888%2Fpj-lw257%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fmimiart888%2Fi%2F10001971%2F&rafcid=wsc_i_is_1014243036473883403'
+            },
+            {
+                id: 'stylish-1',
+                type: 'stylish',
+                name: 'クロスバンドビキニ 2点セット',
+                shop: 'フルグレース',
+                price: '4,360円',
+                image: 'https://thumbnail.image.rakuten.co.jp/@0_mall/fullgrace/cabinet/develop/zb/df/df110zb_1.jpg?_ex=128x128',
+                features: ['クロスバンドデザイン', 'ホルターネック', 'アースカラー'],
+                description: '「体型カバーもオシャレも譲れない」という願いを叶える洗練されたビキニ。胸元のクロスデザインが視線を上に集め、お腹周りをスマートに見せます。デコルテを美しく見せるホルターネックと落ち着いた色合いで、大人のリゾートスタイルが完成します。',
+                traveler: 'デザイン性を重視し、スタイリッシュに見せたい方',
+                url: 'https://hb.afl.rakuten.co.jp/hgc/g00s12jk.qgo2xd6e.g00s12jk.qgo2ya42/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Ffullgrace%2Fdf110zb%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Ffullgrace%2Fi%2F10032733%2F&rafcid=wsc_i_is_1014243036473883403'
+            },
+            {
+                id: 'active-2',
+                type: 'active',
+                name: 'ハーフパンツ付き3点セット',
+                shop: 'zwshop18',
+                price: '1,880円',
+                image: 'https://thumbnail.image.rakuten.co.jp/@0_gold/zwshop/lib/image/dzdx1234665.jpg?_ex=128x128',
+                features: ['メッシュトップス', 'ハイウエストパンツ', '露出控えめ'],
+                description: '「子どもと全力で遊びたい！」アクティブ派ママの強い味方。Tシャツ感覚のトップスと動きやすいハーフパンツで、露出を気にせず水遊びに集中できます。ハイウエストのパンツがお腹をしっかりホールド。驚きの価格も魅力です。',
+                traveler: '動きやすさとコストパフォーマンスを最重視する方',
+                url: 'https://hb.afl.rakuten.co.jp/hgc/g00u1jwk.qgo2xbbe.g00u1jwk.qgo2y68c/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fzwshop%2Fdzdx1234665%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fzwshop%2Fi%2F10002321%2F&rafcid=wsc_i_is_1014243036473883403'
+            },
+            {
+                id: 'stylish-2',
+                type: 'stylish',
+                name: 'スカート風ワンピース',
+                shop: 'カラフル365マーケット',
+                price: '6,740円',
+                image: 'https://thumbnail.image.rakuten.co.jp/@0_mall/miraiippootakaraclub/cabinet/10828114/tb2002369_5.jpg?_ex=128x128',
+                features: ['ワンピース型', 'Aラインスカート', '上品デザイン'],
+                description: '気になる下半身をまるごとカバーしてくれる、安心感抜群のワンピースタイプ。ふんわり広がるAラインのスカートが、お腹・お尻・太ももを優しくカバーします。これ一着でコーデが完成する手軽さと、エレガントな雰囲気が魅力。リゾートホテルのプールにも映える一着です。',
+                traveler: '下半身をしっかりカバーし、上品な印象に見せたい方',
+                url: 'https://hb.afl.rakuten.co.jp/hgc/g00uldyk.qgo2xb69.g00uldyk.qgo2yd46/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fmiraiippootakaraclub%2Fhwikirucpte6un6yx6ic7qjrom-oks%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fmiraiippootakaraclub%2Fi%2F11055821%2F&rafcid=wsc_i_is_1014243036473883403'
+            }
+        ];
+
+        const resultsContainer = document.getElementById('results-container');
+        const btnActive = document.getElementById('btn-active');
+        const btnStylish = document.getElementById('btn-stylish');
+        const conclusionSection = document.getElementById('conclusion');
+        const recommendationText = document.getElementById('recommendation-text');
+
+        function createCard(product) {
+            const featuresHTML = product.features.map(f => `<span class="bg-gray-200 text-gray-700 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">${f}</span>`).join('');
+            return `
+                <div id="card-${product.id}" class="bg-white rounded-2xl card-shadow card-shadow-hover transition-all transform-gpu opacity-0 translate-y-4" style="transition-delay: 150ms;">
+                    <img src="${product.image}" alt="${product.name}" class="w-full h-56 object-cover rounded-t-2xl">
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <div>
+                                <p class="text-sm text-gray-500">${product.shop}</p>
+                                <h3 class="text-xl font-bold text-primary">${product.name}</h3>
+                            </div>
+                            <span class="text-lg font-bold text-gray-800 whitespace-nowrap">${product.price}</span>
+                        </div>
+                        <div class="mb-4">${featuresHTML}</div>
+                        <div id="details-${product.id}" class="text-sm leading-relaxed text-gray-600 hidden mb-4">
+                            <p>${product.description}</p>
+                            <p class="bg-blue-50 mt-3 p-3 rounded-lg text-primary"><span class="font-bold">◎ こんな方に最適：</span>${product.traveler}</p>
+                        </div>
+                        <button onclick="toggleDetails('${product.id}')" class="w-full text-center text-primary font-semibold py-2 rounded-lg border-2 border-primary/50 hover:bg-primary/10 transition-colors">
+                            詳細を見る
+                        </button>
+                        <a href="${product.url}" target="_blank" rel="noopener noreferrer" class="block w-full text-center bg-primary text-white font-bold py-3 px-8 rounded-full mt-3 transition-all transform-gpu hover:scale-105">
+                           楽天でチェックする
+                        </a>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function displayResults(type) {
+            resultsContainer.innerHTML = '';
+            const filteredData = productData.filter(p => p.type === type);
+            
+            filteredData.forEach(product => {
+                resultsContainer.innerHTML += createCard(product);
+            });
+            
+            setTimeout(() => {
+                filteredData.forEach(product => {
+                    const card = document.getElementById(`card-${product.id}`);
+                    if(card) {
+                        card.classList.remove('opacity-0', 'translate-y-4');
+                    }
+                });
+            }, 10);
+
+            updateConclusion(type);
+        }
+
+        function updateConclusion(type) {
+            let text = '';
+            if (type === 'active') {
+                text = `
+                    <p class="font-bold text-lg mb-3">アクティブ派のあなたへ</p>
+                    <p>水辺でアクティブに過ごし、なおかつ紫外線対策もしっかり行いたいあなたには、<strong class="text-primary">ラッシュガードやハーフパンツがセットになったタイプ</strong>が最適です。肌の露出を抑えつつ、洋服のように自然に着こなせるため、体型を気にすることなく、お子様との水遊びやレジャーを心ゆくまで楽しむことができます。これは、機能性と安心感を両立させる賢い選択です。</p>
+                `;
+            } else if (type === 'stylish') {
+                text = `
+                    <p class="font-bold text-lg mb-3">オシャレ派のあなたへ</p>
+                    <p>体型カバーは当然として、何よりも「美しく、スタイリッシュに見えること」を重視するあなたには、<strong class="text-accent">デザイン性の高いビキニやワンピース</strong>がおすすめです。計算されたカッティングやシルエットが、気になる部分をカモフラージュし、あなたの魅力を最大限に引き出してくれます。自信を与えてくれる一着は、リゾートでの時間をより特別なものにしてくれるでしょう。</p>
+                `;
+            }
+            recommendationText.innerHTML = text;
+            conclusionSection.classList.remove('hidden');
+        }
+
+        function toggleDetails(id) {
+            const details = document.getElementById(`details-${id}`);
+            const button = details.nextElementSibling;
+            details.classList.toggle('hidden');
+            button.textContent = details.classList.contains('hidden') ? '詳細を見る' : '閉じる';
+        }
+
+        btnActive.addEventListener('click', () => {
+            displayResults('active');
+            btnActive.classList.add('ring-2', 'ring-offset-2', 'ring-primary');
+            btnStylish.classList.remove('ring-2', 'ring-offset-2', 'ring-accent');
+        });
+
+        btnStylish.addEventListener('click', () => {
+            displayResults('stylish');
+            btnStylish.classList.add('ring-2', 'ring-offset-2', 'ring-accent');
+            btnActive.classList.remove('ring-2', 'ring-offset-2', 'ring-primary');
+        });
+
+        const ctx = document.getElementById('coverPointsChart').getContext('2d');
+        const coverPointsChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['お腹周り', '二の腕', 'お尻', '太もも'],
+                datasets: [{
+                    label: '体型カバーで気になる割合（%）',
+                    data: [85, 70, 65, 55],
+                    backgroundColor: [
+                        'rgba(52, 152, 219, 0.6)',
+                        'rgba(233, 196, 106, 0.6)',
+                        'rgba(46, 204, 113, 0.6)',
+                        'rgba(231, 76, 60, 0.6)'
+                    ],
+                    borderColor: [
+                        'rgba(52, 152, 219, 1)',
+                        'rgba(233, 196, 106, 1)',
+                        'rgba(46, 204, 113, 1)',
+                        'rgba(231, 76, 60, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'x',
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    title: {
+                        display: true,
+                        text: '水着でカバーしたい体のパーツ（想定データ）'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

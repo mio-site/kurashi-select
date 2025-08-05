@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>【LDKベストバイ】MonomamスマートウォッチPrimoインタラクティブレビュー</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
+    <!-- Palette: Warm Neutrals (Background: #FDFBF8, Text: #4B423A, Primary: #A88767, Accent: #8B7E74) -->
+    <style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #FDFBF8;
+            color: #4B423A;
+        }
+        .bg-primary { background-color: #A88767; }
+        .text-primary { color: #A88767; }
+        .border-primary { border-color: #A88767; }
+        .ring-primary { --tw-ring-color: #A88767; }
+        .bg-accent { background-color: #8B7E74; }
+        .text-accent { color: #8B7E74; }
+        .transition-all { transition: all 0.3s ease-in-out; }
+        .transform-gpu { transform: translateZ(0); }
+        .card-shadow { box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .card-shadow-hover:hover { box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+        .affiliate-button {
+            display: inline-block;
+            background: linear-gradient(45deg, #A88767, #8B7E74);
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .affiliate-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(168, 135, 103, 0.4);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+
+        <header class="text-center mb-12 md:mb-20">
+            <p class="text-base md:text-lg text-primary font-bold">テストする女性誌『LDK』ベストバイ受賞</p>
+            <h1 class="text-3xl md:text-5xl font-bold text-accent mb-2">Monomam Primo</h1>
+            <p class="text-lg md:text-xl text-gray-600">本当に価値あるスマートウォッチの選び方</p>
+        </header>
+        
+        <div class="max-w-4xl mx-auto mb-12 md:mb-20">
+            <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/unboxroom/cabinet/sw/sw-p20/sw-p20main2.jpg" alt="Monomam スマートウォッチ Primo" class="rounded-2xl w-full card-shadow">
+        </div>
+
+        <section id="intro" class="max-w-3xl mx-auto text-center mb-16 md:mb-24">
+            <h2 class="text-2xl md:text-3xl font-bold mb-4">その選択は、本当に「賢い」ですか？</h2>
+            <p class="text-base md:text-lg leading-relaxed">
+                「高機能なスマートウォッチは欲しい、でも価格が高い…」多くの人が直面するこのジレンマ。結果的に、デザインや機能を妥協して後悔することも少なくありません。このガイドは、そんなあなたのためのもの。圧倒的なコストパフォーマンスで、妥協のない選択肢をご提案します。
+            </p>
+        </section>
+
+        <section id="challenge" class="mb-16 md:mb-24">
+            <div class="max-w-3xl mx-auto text-center mb-8">
+                <h2 class="text-2xl md:text-3xl font-bold mb-4">価格の常識を覆す</h2>
+                <p class="text-base md:text-lg leading-relaxed">
+                    Monomam Primoがなぜ「革命的」なのか。その答えは、市場価格との比較で一目瞭然です。下のグラフは、有名ブランドの代表的なモデルとPrimoの価格を視覚化したもの。機能性だけでなく、価格においても常識を覆していることがわかります。
+                </p>
+            </div>
+            <div class="bg-white p-4 sm:p-6 md:p-8 rounded-2xl card-shadow max-w-2xl mx-auto">
+                <div class="chart-container relative w-full h-64">
+                    <canvas id="priceChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="choice" class="mb-16 md:mb-24">
+            <div class="max-w-3xl mx-auto text-center mb-12">
+                <h2 class="text-2xl md:text-3xl font-bold mb-4">あなたが一番知りたいことは何ですか？</h2>
+                <p class="text-base md:text-lg leading-relaxed mb-8">
+                    Primoの魅力は多岐にわたります。あなたの興味に合わせて、知りたい機能のカテゴリを選んでください。パーソナライズされた情報が、あなたの疑問に的確にお答えします。
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <button id="btn-communication" class="w-full sm:w-auto bg-primary text-white font-bold py-3 px-8 rounded-full transition-all transform-gpu hover:scale-105 card-shadow-hover">
+                        デザインと通知・通話機能
+                    </button>
+                    <button id="btn-health" class="w-full sm:w-auto bg-accent text-white font-bold py-3 px-8 rounded-full transition-all transform-gpu hover:scale-105 card-shadow-hover">
+                        日々の健康管理と記録機能
+                    </button>
+                </div>
+            </div>
+
+            <div id="results-container" class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+            </div>
+        </section>
+        
+        <section id="conclusion" class="max-w-3xl mx-auto text-center hidden mt-12">
+             <h2 class="text-2xl md:text-3xl font-bold mb-4">あなたにとっての「最高の選択」</h2>
+             <div id="recommendation-text" class="bg-white p-6 md:p-8 rounded-2xl card-shadow text-left leading-relaxed">
+             </div>
+        </section>
+
+    </div>
+
+    <script>
+        const productData = {
+            "name": "Monomam Primo",
+            "price": 5980,
+            "affiliateUrl": "https://hb.afl.rakuten.co.jp/hgc/g00tre1k.qgo2xbba.g00tre1k.qgo2y8c9/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Funboxroom%2Fsw-p18t_c%2F",
+            "reviewCount": 9060,
+            "reviewAverage": 4.37,
+            "features": [
+                {
+                    "id": "design",
+                    "type": "communication",
+                    "icon": "✨",
+                    "title": "美しいAMOLEDディスプレイ",
+                    "description": "高級機に採用される有機ELディスプレイで、文字盤や通知が驚くほど鮮明。常時表示にも対応し、いつでもサッと時間を確認できます。100種類以上の壁紙とAIによる文字盤作成で、あなただけのデザインを楽しめます。"
+                },
+                {
+                    "id": "call",
+                    "type": "communication",
+                    "icon": "📞",
+                    "title": "手元で完結する通話・通知",
+                    "description": "スマホを取り出さずに通話が可能。LINEや各種SNSの通知も手元で全文確認できます。家事や仕事で手が離せない時でも、重要な連絡を逃しません。"
+                },
+                {
+                    "id": "health",
+                    "type": "health",
+                    "icon": "❤️",
+                    "title": "24時間、健康を見守る",
+                    "description": "心拍数、血中酸素レベルを継続的にモニタリング。日々の体調変化の気づきをサポートします。記録されたデータは専用アプリでいつでも確認でき、健康意識を高めます。"
+                },
+                {
+                    "id": "sleep",
+                    "type": "health",
+                    "icon": "🌙",
+                    "title": "睡眠の質を可視化",
+                    "description": "就寝中の体の動きを検知し、「深い睡眠」「浅い睡眠」を記録。睡眠の質をスコアで可視化し、生活習慣の改善に役立てることができます。"
+                }
+            ]
+        };
+
+        const resultsContainer = document.getElementById('results-container');
+        const btnComm = document.getElementById('btn-communication');
+        const btnHealth = document.getElementById('btn-health');
+        const conclusionSection = document.getElementById('conclusion');
+        const recommendationText = document.getElementById('recommendation-text');
+
+        function createCard(feature) {
+            return `
+                <div id="card-${feature.id}" class="bg-white rounded-2xl card-shadow card-shadow-hover transition-all transform-gpu opacity-0 translate-y-4" style="transition-delay: 150ms;">
+                    <div class="p-6">
+                        <div class="flex items-center mb-3">
+                            <span class="text-3xl mr-3">${feature.icon}</span>
+                            <h3 class="text-xl font-bold text-primary">${feature.title}</h3>
+                        </div>
+                        <p class="text-sm leading-relaxed text-gray-600">
+                            ${feature.description}
+                        </p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function displayResults(type) {
+            resultsContainer.innerHTML = '';
+            const filteredData = productData.features.filter(f => f.type === type);
+            
+            filteredData.forEach(feature => {
+                resultsContainer.innerHTML += createCard(feature);
+            });
+            
+            setTimeout(() => {
+                filteredData.forEach(feature => {
+                    const card = document.getElementById(`card-${feature.id}`);
+                    if(card) {
+                        card.classList.remove('opacity-0', 'translate-y-4');
+                    }
+                });
+            }, 10);
+
+            updateConclusion(type);
+        }
+
+        function updateConclusion(type) {
+            let text = '';
+            if (type === 'communication') {
+                text = `
+                    <p class="font-bold text-lg mb-3">日々の連携をスマートにしたいあなたへ</p>
+                    <p>デザインの美しさと、日常に欠かせない通知・通話機能を重視するなら、Monomam Primoは最高のパートナーです。手頃な価格で、生活の利便性とスタイルを格段に向上させることができます。もう、高いだけのスマートウォッチに妥協する必要はありません。</p>
+                `;
+            } else if (type === 'health') {
+                text = `
+                    <p class="font-bold text-lg mb-3">手軽に健康管理を始めたいあなたへ</p>
+                    <p>自分の体を理解し、日々のコンディションを整えたいと考えるなら、Primoが提供する詳細な健康データが力強い味方になります。高価な投資は不要です。まずはこの一台から、賢く、手軽にセルフケアを始めてみませんか？</p>
+                `;
+            }
+            recommendationText.innerHTML = text + `
+                <div class="mt-6 text-center">
+                    <a href="${productData.affiliateUrl}" target="_blank" rel="noopener noreferrer" class="affiliate-button font-bold py-3 px-8 rounded-full">
+                        楽天で詳細とレビュー(${productData.reviewCount.toLocaleString()}件)を見る
+                    </a>
+                </div>
+            `;
+            conclusionSection.classList.remove('hidden');
+        }
+
+        btnComm.addEventListener('click', () => {
+            displayResults('communication');
+            btnComm.classList.add('ring-2', 'ring-offset-2', 'ring-primary');
+            btnHealth.classList.remove('ring-2', 'ring-offset-2', 'ring-primary');
+        });
+
+        btnHealth.addEventListener('click', () => {
+            displayResults('health');
+            btnHealth.classList.add('ring-2', 'ring-offset-2', 'ring-primary');
+            btnComm.classList.remove('ring-2', 'ring-offset-2', 'ring-primary');
+        });
+
+        const ctx = document.getElementById('priceChart').getContext('2d');
+        const priceChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [`${productData.name}`, '有名ブランドの代表モデル'],
+                datasets: [{
+                    label: '市場価格の比較（円）',
+                    data: [productData.price, 42800], // Apple Watch SE (GPSモデル, 40mm) 2024年参考価格
+                    backgroundColor: ['#A88767', '#D6C7B8'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return new Intl.NumberFormat('ja-JP', { style: 'currency', currency: 'JPY' }).format(context.parsed.y);
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: { grid: { display: false } },
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) { return (value / 1000) + '千円'; }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
