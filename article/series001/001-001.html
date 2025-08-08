@@ -14,8 +14,8 @@
     <link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
     <link rel="manifest" href="../../manifest.webmanifest">
 
-    <!-- Scripts (defer 属性を適用) -->
-    <script defer src="https://cdn.tailwindcss.com"></script>
+    <!-- Tailwindは初期描画で必要なため defer しない -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
 
@@ -678,7 +678,7 @@
             btnDarkToggle.textContent = document.documentElement.classList.contains('dark') ? '☀️ ライト' : '🌙 ダーク';
             btnDarkToggle.setAttribute('aria-pressed', document.documentElement.classList.contains('dark'));
         };
-        const preferred = getTheme() || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        const preferred = getTheme() || 'light';
         applyTheme(preferred);
         btnDarkToggle.addEventListener('click', () => {
             const isDark = document.documentElement.classList.toggle('dark');
@@ -784,6 +784,24 @@
                 s.text = JSON.stringify(itemList);
                 document.head.appendChild(s);
             } catch {}
+        })();
+
+        // detailsを開いたときにグラフを初期化/再描画
+        (function bindDetailsChart(){
+            const detailsEl = document.querySelector('#chart-analysis details');
+            if (!detailsEl) return;
+            detailsEl.addEventListener('toggle', () => {
+                if (detailsEl.open) {
+                    if (!productsChart) {
+                        const list = currentData && currentData.length ? currentData : filterData();
+                        // 初回はここで初期化（closed状態で生成しない）
+                        refreshChart(list);
+                    } else {
+                        // サイズ再計算のみでOK
+                        setTimeout(() => { try { productsChart.resize(); } catch {} }, 50);
+                    }
+                }
+            });
         })();
     </script>
     
