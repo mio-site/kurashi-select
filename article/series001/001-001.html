@@ -16,8 +16,8 @@
 
     <!-- Tailwindは初期描画で必要なため defer しない -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
 
     <!-- Stylesheets (CSS 遅延読み込みを適用) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -154,12 +154,12 @@
                     <span class="font-semibold text-primary">人気×価格の関係を見る（グラフを開く）</span>
                     <span class="text-xs text-muted">理解の助けに。買い物は下のリストからすぐ可能です。</span>
                 </summary>
-                <div class="p-4 sm:p-6 md:p-8 pt-0">
-                    <div class="chart-container">
-                        <canvas id="productsChart"></canvas>
-                    </div>
-                    <p class="mt-4 text-[11px] text-muted">データ更新: <span id="data-updated"></span>｜出典: 楽天市場ランキング｜算出: 価格・評価・人気の総合</p>
-                </div>
+                                 <div class="p-4 sm:p-6 md:p-8 pt-0">
+                     <div class="chart-container min-h-[400px] w-full">
+                         <canvas id="productsChart" style="width: 100%; height: 400px;"></canvas>
+                     </div>
+                     <p class="mt-4 text-[11px] text-muted">データ更新: <span id="data-updated"></span>｜出典: 楽天市場ランキング｜算出: 価格・評価・人気の総合</p>
+                 </div>
             </details>
         </section>
 
@@ -371,10 +371,23 @@
             tagsContainer.appendChild(b);
         });
 
+        function imgUrlWithSize(url, size) {
+            if (!url) return url;
+            const hasQuery = url.includes('?');
+            const exParam = `_ex=${size}x${size}`;
+            if (/_ex=\d+x\d+/.test(url)) {
+                return url.replace(/_ex=\d+x\d+/, exParam);
+            }
+            return url + (hasQuery ? '&' : '?') + exParam;
+        }
+        function buildSrcset(url) {
+            const sizes = [320, 480, 640, 800];
+            return sizes.map(s => `${imgUrlWithSize(url, s)} ${s}w`).join(', ');
+        }
         function createCard(product) {
             return `
                 <div id="card-${product.rank}" class="bg-white rounded-2xl card-shadow card-shadow-hover transition-all transform-gpu opacity-0 translate-y-4" style="transition-delay: ${product.rank * 40}ms;">
-                    <img src="${product.imageUrl}" alt="${product.itemName}" class="rounded-t-2xl w-full h-48 object-cover" loading="lazy" decoding="async">
+                    <img src="${imgUrlWithSize(product.imageUrl, 640)}" srcset="${buildSrcset(product.imageUrl)}" sizes="(min-width:1024px) 320px, (min-width:768px) 45vw, 90vw" alt="${product.itemName}" class="rounded-t-2xl w-full object-contain bg-white" style="aspect-ratio: 1 / 1;" loading="lazy" decoding="async">
                     <div class="p-5">
                         <div class="flex justify-between items-start mb-3">
                             <div>
@@ -734,7 +747,7 @@
             const el = document.getElementById('top3-container');
             el.innerHTML = list.map(p => `
                 <div class="bg-white rounded-2xl card-shadow card-shadow-hover transition-all transform-gpu">
-                    <img src="${p.imageUrl}" alt="${p.itemName}" loading="lazy" decoding="async" class="rounded-t-2xl w-full h-44 object-cover">
+                    <img src="${imgUrlWithSize(p.imageUrl, 640)}" srcset="${buildSrcset(p.imageUrl)}" sizes="(min-width:1024px) 320px, (min-width:768px) 30vw, 90vw" alt="${p.itemName}" loading="lazy" decoding="async" class="rounded-t-2xl w-full object-contain bg-white" style="aspect-ratio: 1 / 1;">
                     <div class="p-5">
                         <p class="text-xs text-gray-500">おすすめ</p>
                         <h3 class="font-bold text-primary leading-tight mb-1">${p.itemName}</h3>
@@ -792,16 +805,26 @@
             if (!detailsEl) return;
             detailsEl.addEventListener('toggle', () => {
                 if (detailsEl.open) {
-                    if (!productsChart) {
-                        const list = currentData && currentData.length ? currentData : filterData();
-                        // 初回はここで初期化（closed状態で生成しない）
-                        refreshChart(list);
-                    } else {
-                        // サイズ再計算のみでOK
-                        setTimeout(() => { try { productsChart.resize(); } catch {} }, 50);
-                    }
+                    // 短い遅延でChart.jsが完全にロードされるのを待つ
+                    setTimeout(() => {
+                        if (!productsChart) {
+                            const list = currentData && currentData.length ? currentData : filterData();
+                            // 初回はここで初期化（closed状態で生成しない）
+                            refreshChart(list);
+                        } else {
+                            // サイズ再計算のみでOK
+                            setTimeout(() => { try { productsChart.resize(); } catch {} }, 50);
+                        }
+                    }, 100);
                 }
             });
+            // もし初期状態で開いていれば即生成
+            if (detailsEl.open) {
+                setTimeout(() => {
+                    const list = currentData && currentData.length ? currentData : filterData();
+                    refreshChart(list);
+                }, 200);
+            }
         })();
     </script>
     
