@@ -1,0 +1,13 @@
+{
+  "name": "暮らしセレクト | 記事",
+  "short_name": "暮らしセレクト",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#FDFBF8",
+  "theme_color": "#A88767",
+  "lang": "ja",
+  "icons": [
+    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "/icon.png", "sizes": "192x192", "type": "image/png" }
+  ]
+}

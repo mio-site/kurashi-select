@@ -7,10 +7,12 @@
     <!-- SEO & Viewport Meta Tags -->
     <meta name="description" content="楽天レディースファッションの2025年最新売れ筋ランキングをデータで分析。価格、レビュー評価、人気度をインタラクティブなグラフと比較し、あなたに最適な一着を見つけます。">
     <meta content='width=device-width,initial-scale=1.0,minimum-scale=1.0' name='viewport'/>
+    <meta name="theme-color" content="#A88767">
 
-    <!-- Icons (ルートからの相対パスで指定) -->
+    <!-- Icons & PWA -->
     <link rel="icon" type="image/png" href="../../icon.png">
     <link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+    <link rel="manifest" href="../../manifest.webmanifest">
 
     <!-- Scripts (defer 属性を適用) -->
     <script defer src="https://cdn.tailwindcss.com"></script>
@@ -23,22 +25,48 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     
     <style>
+        :root {
+            --bg: #FDFBF8;
+            --text: #4B423A;
+            --primary: #A88767;
+            --accent: #8B7E74;
+            --card: #FFFFFF;
+            --muted: #6B7280; /* gray-500 */
+        }
+        .dark {
+            --bg: #1B1A19;
+            --text: #EAE6DF;
+            --primary: #C5A982;
+            --accent: #9A8C7F;
+            --card: #23211F;
+            --muted: #9CA3AF; /* gray-400 */
+        }
         body {
             font-family: 'Noto Sans JP', sans-serif;
-            background-color: #FDFBF8; /* Warm Neutral: Background */
-            color: #4B423A; /* Warm Neutral: Text */
+            background-color: var(--bg);
+            color: var(--text);
         }
-        .bg-primary { background-color: #A88767; }
-        .text-primary { color: #A88767; }
-        .border-primary { border-color: #A88767; }
-        .bg-accent { background-color: #8B7E74; }
-        .border-accent { border-color: #8B7E74; }
-        .ring-primary { ring-color: #A88767; }
+        .bg-primary { background-color: var(--primary); }
+        .text-primary { color: var(--primary); }
+        .border-primary { border-color: var(--primary); }
+        .bg-accent { background-color: var(--accent); }
+        .border-accent { border-color: var(--accent); }
+        .text-muted { color: var(--muted); }
         .transition-all { transition: all 0.3s ease-in-out; }
         .transform-gpu { transform: translateZ(0); }
         .card-shadow { box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         .card-shadow-hover:hover { box-shadow: 0 8px 25px rgba(75, 66, 58, 0.1); }
         .chart-container { position: relative; height: 450px; width: 100%;}
+        .dark .bg-white { background-color: var(--card); }
+        .dark .text-gray-600 { color: var(--muted); }
+        .chip { border: 1px solid rgba(0,0,0,0.08); padding: 4px 10px; border-radius: 9999px; font-size: 12px; }
+        .chip-selected { outline: 2px solid var(--primary); background-color: rgba(168,135,103,0.1); }
+        .sticky-bar { position: sticky; bottom: 12px; z-index: 40; }
+        .floating { position: fixed; right: 16px; bottom: 16px; z-index: 50; }
+        .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.35); display: none; align-items: center; justify-content: center; z-index: 50; }
+        .modal { max-width: 960px; width: calc(100% - 2rem); background: var(--card); color: var(--text); border-radius: 16px; box-shadow: 0 25px 50px rgba(0,0,0,0.2); }
+        .range { accent-color: var(--primary); }
+        .btn { cursor: pointer; }
     </style>
 </head>
 <body class="antialiased" style="display: none;">
@@ -50,11 +78,60 @@
             <p class="text-lg md:text-xl text-gray-600">データで読み解く、楽天「本当に売れてる」レディースファッションTOP10</p>
         </header>
 
-        <section id="intro" class="max-w-3xl mx-auto text-center mb-16 md:mb-24">
+        <section id="intro" class="max-w-3xl mx-auto text-center mb-10 md:mb-14">
             <h2 class="text-2xl md:text-3xl font-bold mb-4">賢い買い物は、情報から。</h2>
             <p class="text-base md:text-lg leading-relaxed">
                 「みんなが何を買っているの？」「本当に良い商品はどれ？」夏のファッション選びは、選択肢が多すぎて迷ってしまいます。このガイドでは、楽天市場の最新ランキングデータを基に、「価格」「レビュー評価」「人気度（レビュー数）」を徹底分析。あなたの価値観に合った最高の1着を見つけるための、インタラクティブな旅にご案内します。
             </p>
+        </section>
+
+        <!-- コントロールパネル -->
+        <section id="controls" class="bg-white dark:bg-opacity-80 backdrop-blur-sm p-4 sm:p-6 md:p-8 rounded-2xl card-shadow max-w-4xl mx-auto mb-10 md:mb-14">
+            <div class="flex flex-col gap-4">
+                <div class="flex flex-col md:flex-row gap-3 md:items-center">
+                    <div class="flex-1">
+                        <label for="search-box" class="block text-sm mb-1 text-muted">キーワード検索</label>
+                        <input id="search-box" type="search" placeholder="例: UV, ワンピース, パンツ…" class="w-full border rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary/50" />
+                    </div>
+                    <div class="flex gap-2 items-end">
+                        <button id="btn-dark-toggle" class="btn bg-accent text-white px-4 py-2 rounded-xl card-shadow-hover" aria-pressed="false">🌙 ダーク</button>
+                        <button id="btn-install" class="btn bg-accent text-white px-4 py-2 rounded-xl card-shadow-hover hidden">⬇️ インストール</button>
+                        <button id="btn-reset" class="btn bg-white border px-4 py-2 rounded-xl card-shadow-hover">リセット</button>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm mb-1 text-muted">価格帯（円）</label>
+                        <div class="flex items-center gap-2">
+                            <input id="price-min" type="number" class="w-24 border rounded-lg px-2 py-1" min="0" step="100" />
+                            <span class="text-muted">〜</span>
+                            <input id="price-max" type="number" class="w-24 border rounded-lg px-2 py-1" min="0" step="100" />
+                            <input id="price-range" type="range" min="0" max="100" value="0" class="range flex-1" aria-label="価格範囲(ショートカット)" />
+                        </div>
+                    </div>
+                    <div>
+                        <label for="filter-rating" class="block text-sm mb-1 text-muted">最低評価</label>
+                        <input id="filter-rating" type="range" min="0" max="5" step="0.1" value="0" class="range w-full" />
+                        <div class="text-xs text-muted mt-1"><span id="label-rating">0.0</span> 以上</div>
+                    </div>
+                    <div>
+                        <label for="filter-review" class="block text-sm mb-1 text-muted">最低レビュー件数</label>
+                        <input id="filter-review" type="range" min="0" max="10000" step="100" value="0" class="range w-full" />
+                        <div class="text-xs text-muted mt-1"><span id="label-review">0</span> 件以上</div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <label class="inline-flex items-center gap-2 text-sm"><input id="filter-fav" type="checkbox" class="accent-[var(--primary)]"><span>お気に入りのみ</span></label>
+                        <div class="ml-auto flex gap-2">
+                            <button id="btn-sort-score" class="btn bg-primary text-white px-4 py-2 rounded-xl card-shadow-hover">✨ おすすめ順</button>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="text-sm mb-2 text-muted">タグで絞り込み</div>
+                    <div id="tags-container" class="flex flex-wrap gap-2"></div>
+                </div>
+                <div class="text-xs text-muted" id="result-summary" aria-live="polite"></div>
+            </div>
         </section>
 
         <section id="chart-analysis" class="mb-16 md:mb-24">
@@ -72,7 +149,7 @@
         </section>
 
         <section id="interactive-selection" class="mb-16 md:mb-24">
-            <div class="max-w-3xl mx-auto text-center mb-12">
+            <div class="max-w-3xl mx-auto text-center mb-8">
                 <h2 class="text-2xl md:text-3xl font-bold mb-4">あなたの選択：何を基準に選びますか？</h2>
                 <p class="text-base md:text-lg leading-relaxed mb-8">
                     価値観は人それぞれ。あなたの探し方に合わせて、商品をご紹介します。下のボタンから、あなたの考えに近い方を選んでください。
@@ -104,9 +181,21 @@
              </div>
         </section>
 
+        <!-- 比較バー（sticky） -->
+        <div id="compare-bar" class="sticky-bar max-w-4xl mx-auto mt-6 hidden">
+            <div class="bg-white rounded-2xl card-shadow p-3 md:p-4 flex items-center gap-3">
+                <div class="text-sm flex-1"><span id="compare-count">0</span> 件選択中（最大3件）</div>
+                <div class="flex gap-2">
+                    <button id="btn-compare" class="btn bg-primary text-white px-4 py-2 rounded-xl disabled:opacity-40" disabled>🔍 比較する</button>
+                    <button id="btn-compare-clear" class="btn border px-4 py-2 rounded-xl">クリア</button>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <script>
+        // ------- データ定義
         const productsData = [
           {
             "rank": 1, "itemName": "＼18％OFFクーポン／UV パーカー 冷感 -7℃", "itemPrice": 1980, "reviewCount": 13633, "reviewAverage": 4.33, "affiliateUrl": "https://hb.afl.rakuten.co.jp/hgc/g00tgx3k.qgo2xc2d.g00tgx3k.qgo2y170/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fnityukan0715%2Fqqdou7009a%2F&rafcid=wsc_i_ra_1014243036473883403",
@@ -157,17 +246,130 @@
             review: document.getElementById('btn-sort-review')
         };
 
+        // 追加UI要素
+        const searchBox = document.getElementById('search-box');
+        const priceMinInput = document.getElementById('price-min');
+        const priceMaxInput = document.getElementById('price-max');
+        const priceRangeQuick = document.getElementById('price-range');
+        const filterRating = document.getElementById('filter-rating');
+        const filterReview = document.getElementById('filter-review');
+        const labelRating = document.getElementById('label-rating');
+        const labelReview = document.getElementById('label-review');
+        const favOnlyCheckbox = document.getElementById('filter-fav');
+        const btnReset = document.getElementById('btn-reset');
+        const btnSortScore = document.getElementById('btn-sort-score');
+        const tagsContainer = document.getElementById('tags-container');
+        const resultSummary = document.getElementById('result-summary');
+        const compareBar = document.getElementById('compare-bar');
+        const compareCount = document.getElementById('compare-count');
+        const btnCompare = document.getElementById('btn-compare');
+        const btnCompareClear = document.getElementById('btn-compare-clear');
+        const btnDarkToggle = document.getElementById('btn-dark-toggle');
+        const btnInstall = document.getElementById('btn-install');
+
+        // 比較モーダル（動的生成）
+        const modalBackdrop = document.createElement('div');
+        modalBackdrop.className = 'modal-backdrop';
+        modalBackdrop.innerHTML = `
+            <div class="modal p-4 md:p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-bold">商品比較</h3>
+                    <button id="modal-close" class="btn border px-3 py-1 rounded-lg">閉じる</button>
+                </div>
+                <div id="compare-body" class="overflow-x-auto"></div>
+            </div>
+        `;
+        document.body.appendChild(modalBackdrop);
+
+        // ------- ユーティリティ
+        const debounce = (fn, ms = 250) => {
+            let t; return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); };
+        };
+        const getFavorites = () => new Set(JSON.parse(localStorage.getItem('favorites') || '[]'));
+        const setFavorites = (set) => localStorage.setItem('favorites', JSON.stringify(Array.from(set)));
+        const getTheme = () => localStorage.getItem('theme');
+        const setTheme = (t) => localStorage.setItem('theme', t);
+        const getState = () => JSON.parse(localStorage.getItem('state') || 'null');
+        const setState = (s) => localStorage.setItem('state', JSON.stringify(s));
+
+        const productId = (p) => p.itemName; // 一意と仮定
+
+        const inferTags = (p) => {
+            const name = `${p.itemName} ${p.catchcopy}`.toLowerCase();
+            const tags = new Set();
+            if (name.includes('uv')) tags.add('UVカット');
+            if (name.includes('冷感') || name.includes('ひんやり')) tags.add('冷感');
+            if (name.includes('ワンピ') || name.includes('onepiece')) tags.add('ワンピース');
+            if (name.includes('水着') || name.includes('ラッシュ')) tags.add('水着');
+            if (name.includes('パンツ')) tags.add('パンツ');
+            if (name.includes('デニム')) tags.add('デニム');
+            if (name.includes('ルームウェア')) tags.add('ルームウェア');
+            if (name.includes('体型カバー')) tags.add('体型カバー');
+            if (name.includes('パーカー')) tags.add('パーカー');
+            return Array.from(tags);
+        };
+
+        // 正規化用メトリクス
+        const metrics = {
+            price: { getter: p => p.itemPrice, better: 'lower' },
+            rating: { getter: p => p.reviewAverage, better: 'higher' },
+            reviews: { getter: p => p.reviewCount, better: 'higher' },
+        };
+
+        const state = {
+            sortKey: 'rank',
+            query: '',
+            priceMin: 0,
+            priceMax: 0,
+            ratingMin: 0,
+            reviewMin: 0,
+            onlyFavorites: false,
+            selectedTags: new Set(),
+            weights: { price: 0.34, rating: 0.33, reviews: 0.33 },
+        };
+
+        let favorites = getFavorites();
+        let compareSet = new Set();
+        let augmented = productsData.map(p => ({ ...p, tags: inferTags(p) }));
+        let priceBounds = { min: Math.min(...augmented.map(p => p.itemPrice)), max: Math.max(...augmented.map(p => p.itemPrice)) };
+        state.priceMin = priceBounds.min; state.priceMax = priceBounds.max;
+
+        // UI 初期値
+        priceMinInput.value = state.priceMin;
+        priceMaxInput.value = state.priceMax;
+        priceRangeQuick.value = 0; // 0=全域、右へ行くほど安価寄り
+        filterRating.value = state.ratingMin; labelRating.textContent = Number(state.ratingMin).toFixed(1);
+        filterReview.value = state.reviewMin; labelReview.textContent = Number(state.reviewMin).toLocaleString();
+
+        // タグ一覧生成
+        const allTags = Array.from(new Set(augmented.flatMap(p => p.tags))).sort();
+        allTags.forEach(tag => {
+            const b = document.createElement('button');
+            b.className = 'chip';
+            b.textContent = tag;
+            b.setAttribute('aria-pressed', 'false');
+            b.addEventListener('click', () => {
+                if (state.selectedTags.has(tag)) { state.selectedTags.delete(tag); b.classList.remove('chip-selected'); b.setAttribute('aria-pressed', 'false'); }
+                else { state.selectedTags.add(tag); b.classList.add('chip-selected'); b.setAttribute('aria-pressed', 'true'); }
+                displayResults(state.sortKey);
+            });
+            tagsContainer.appendChild(b);
+        });
+
         function createCard(product) {
             return `
-                <div id="card-${product.rank}" class="bg-white rounded-2xl card-shadow card-shadow-hover transition-all transform-gpu opacity-0 translate-y-4" style="transition-delay: ${product.rank * 50}ms;">
-                    <img src="${product.imageUrl}" alt="${product.itemName}" class="rounded-t-2xl w-full h-48 object-cover">
+                <div id="card-${product.rank}" class="bg-white rounded-2xl card-shadow card-shadow-hover transition-all transform-gpu opacity-0 translate-y-4" style="transition-delay: ${product.rank * 40}ms;">
+                    <img src="${product.imageUrl}" alt="${product.itemName}" class="rounded-t-2xl w-full h-48 object-cover" loading="lazy" decoding="async">
                     <div class="p-5">
                         <div class="flex justify-between items-start mb-3">
                             <div>
                                 <p class="text-xs text-gray-500">RANK ${product.rank}</p>
                                 <h3 class="font-bold text-primary leading-tight">${product.itemName}</h3>
                             </div>
+                            <div class="flex items-center gap-2">
+                                <button class="btn favorite-btn" data-id="${product.itemName}" aria-label="お気に入りに追加/解除">${favorites.has(product.itemName) ? '★' : '☆'}</button>
                             <span class="text-lg font-bold text-accent whitespace-nowrap">¥${product.itemPrice.toLocaleString()}</span>
+                            </div>
                         </div>
                         <div class="text-sm space-y-2 mb-4">
                             <p class="text-gray-600">${product.catchcopy}</p>
@@ -176,56 +378,226 @@
                                 <span class="text-gray-500">✍️ ${product.reviewCount.toLocaleString()}件</span>
                             </div>
                         </div>
+                        <div class="flex flex-wrap gap-2 mb-3">
+                            ${product.tags.map(t => `<span class="chip">${t}</span>`).join('')}
+                        </div>
                          <div id="details-${product.rank}" class="text-sm leading-relaxed text-gray-700 bg-stone-50 p-3 rounded-lg hidden mb-4">
                             <p>${product.description}</p>
                         </div>
                         <button onclick="toggleDetails(${product.rank})" class="w-full text-center text-primary font-semibold py-2 rounded-lg border-2 border-primary/30 hover:bg-primary/10 transition-colors">
                             詳細を見る
                         </button>
-                         <a href="${product.affiliateUrl}" target="_blank" rel="noopener noreferrer" class="block w-full text-center bg-primary text-white font-bold py-3 px-4 rounded-lg mt-3 hover:opacity-90 transition-opacity">
+                        <div class="flex gap-2 mt-3">
+                            <label class="inline-flex items-center gap-2 text-sm border rounded-lg px-3 py-2">
+                                <input type="checkbox" class="compare-checkbox" data-id="${product.itemName}">
+                                比較
+                            </label>
+                            <button class="btn border rounded-lg px-3 py-2 text-sm share-btn" data-rank="${product.rank}" data-name="${product.itemName}">共有</button>
+                            <a href="${product.affiliateUrl}" target="_blank" rel="noopener noreferrer" class="block w-full text-center bg-primary text-white font-bold py-3 px-4 rounded-lg hover:opacity-90 transition-opacity flex-1">
                             楽天でチェック
                         </a>
+                        </div>
                     </div>
                 </div>
             `;
         }
 
+        let productsChart = null;
+        let currentData = [];
+
+        function computeScores(list) {
+            const values = {
+                price: list.map(metrics.price.getter),
+                rating: list.map(metrics.rating.getter),
+                reviews: list.map(metrics.reviews.getter),
+            };
+            const minmax = (arr) => ({ min: Math.min(...arr), max: Math.max(...arr) });
+            const mm = { price: minmax(values.price), rating: minmax(values.rating), reviews: minmax(values.reviews) };
+            const norm = (v, {min, max}, better) => {
+                if (max === min) return 0.5; // 同一値
+                const t = (v - min) / (max - min);
+                return better === 'higher' ? t : 1 - t;
+            };
+            return list.map(p => {
+                const sPrice = norm(p.itemPrice, mm.price, 'lower');
+                const sRating = norm(p.reviewAverage, mm.rating, 'higher');
+                const sReviews = norm(p.reviewCount, mm.reviews, 'higher');
+                const score = sPrice * state.weights.price + sRating * state.weights.rating + sReviews * state.weights.reviews;
+                return { ...p, score: Number(score.toFixed(4)) };
+            });
+        }
+
+        function filterData() {
+            const q = state.query.trim().toLowerCase();
+            const favoritesFilter = state.onlyFavorites ? favorites : null;
+            let list = augmented.filter(p =>
+                p.itemPrice >= state.priceMin && p.itemPrice <= state.priceMax &&
+                p.reviewAverage >= state.ratingMin &&
+                p.reviewCount >= state.reviewMin &&
+                (q === '' || `${p.itemName} ${p.catchcopy} ${p.description}`.toLowerCase().includes(q)) &&
+                (!favoritesFilter || favoritesFilter.has(productId(p))) &&
+                (state.selectedTags.size === 0 || p.tags.some(t => state.selectedTags.has(t)))
+            );
+            list = computeScores(list);
+            return list;
+        }
+
         function displayResults(sortKey) {
+            state.sortKey = sortKey;
             resultsContainer.innerHTML = '';
             
-            let sortedData = [...productsData];
-            if(sortKey === 'price') {
-                sortedData.sort((a,b) => a.itemPrice - b.itemPrice);
-            } else if (sortKey === 'review') {
-                sortedData.sort((a,b) => b.reviewAverage - a.reviewAverage);
-            } else { // rank
-                 sortedData.sort((a,b) => a.rank - b.rank);
-            }
+            let list = filterData();
+            if(sortKey === 'price') list.sort((a,b) => a.itemPrice - b.itemPrice);
+            else if (sortKey === 'review') list.sort((a,b) => b.reviewAverage - a.reviewAverage);
+            else if (sortKey === 'rank') list.sort((a,b) => a.rank - b.rank);
+            else if (sortKey === 'score') list.sort((a,b) => b.score - a.score);
 
-            sortedData.forEach((product, index) => {
-                // アニメーションのために一時的にランクをindexに差し替える
-                const tempProduct = {...product, rank: index + 1};
-                resultsContainer.innerHTML += createCard(tempProduct);
+            // 画面挿入（ランクは表示用連番）
+            list.forEach((product, index) => {
+                const temp = { ...product, rank: index + 1 };
+                resultsContainer.insertAdjacentHTML('beforeend', createCard(temp));
             });
-            
+
+            // アニメーション
             setTimeout(() => {
-                sortedData.forEach((product, index) => {
+                list.forEach((_, index) => {
                     const card = document.getElementById(`card-${index + 1}`);
-                    if(card) {
-                        card.classList.remove('opacity-0', 'translate-y-4');
-                    }
+                    if(card) card.classList.remove('opacity-0', 'translate-y-4');
                 });
             }, 10);
 
-            // Update button styles
+            // ボタン状態
             for (const key in sortButtons) {
-                if(key === sortKey) {
-                    sortButtons[key].classList.remove('bg-accent');
-                    sortButtons[key].classList.add('bg-primary', 'ring-2', 'ring-offset-2');
+                if(key === sortKey) { sortButtons[key].classList.remove('bg-accent'); sortButtons[key].classList.add('bg-primary', 'ring-2', 'ring-offset-2'); }
+                else { sortButtons[key].classList.remove('bg-primary', 'ring-2', 'ring-offset-2'); sortButtons[key].classList.add('bg-accent'); }
+            }
+
+            // おすすめ順ボタン
+            if (sortKey === 'score') btnSortScore.classList.add('ring-2', 'ring-offset-2'); else btnSortScore.classList.remove('ring-2', 'ring-offset-2');
+
+            // 共有/お気に入り/比較 イベント
+            document.querySelectorAll('.favorite-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = btn.dataset.id;
+                    if (favorites.has(id)) favorites.delete(id); else favorites.add(id);
+                    setFavorites(favorites);
+                    btn.textContent = favorites.has(id) ? '★' : '☆';
+                    if (state.onlyFavorites) displayResults(state.sortKey);
+                });
+            });
+            document.querySelectorAll('.compare-checkbox').forEach(chk => {
+                const id = chk.dataset.id;
+                chk.checked = compareSet.has(id);
+                chk.addEventListener('change', () => {
+                    if (chk.checked) {
+                        if (compareSet.size >= 3) { chk.checked = false; return; }
+                        compareSet.add(id);
                 } else {
-                    sortButtons[key].classList.remove('bg-primary', 'ring-2', 'ring-offset-2');
-                    sortButtons[key].classList.add('bg-accent');
-                }
+                        compareSet.delete(id);
+                    }
+                    updateCompareBar();
+                });
+            });
+            document.querySelectorAll('.share-btn').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    const rank = btn.dataset.rank;
+                    const name = btn.dataset.name;
+                    const url = `${location.origin}${location.pathname}#card-${rank}`;
+                    try {
+                        if (navigator.share) await navigator.share({ title: name, url });
+                        else { await navigator.clipboard.writeText(url); btn.textContent = 'コピー済み'; setTimeout(()=>btn.textContent='共有',1500); }
+                    } catch {}
+                });
+            });
+
+            currentData = list;
+            refreshChart(list);
+            resultSummary.textContent = `${list.length} 件表示中`;
+            setState({ ...state, selectedTags: Array.from(state.selectedTags) });
+        }
+
+        function updateCompareBar() {
+            compareCount.textContent = compareSet.size;
+            btnCompare.disabled = compareSet.size < 2;
+            compareBar.classList.toggle('hidden', compareSet.size === 0);
+        }
+
+        function openCompareModal() {
+            const ids = Array.from(compareSet);
+            const items = augmented.filter(p => ids.includes(productId(p)));
+            const best = {
+                price: Math.min(...items.map(p => p.itemPrice)),
+                rating: Math.max(...items.map(p => p.reviewAverage)),
+                reviews: Math.max(...items.map(p => p.reviewCount)),
+            };
+            const html = `
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr>
+                            <th class="text-left p-2">項目</th>
+                            ${items.map(p => `<th class="text-left p-2">${p.itemName}</th>`).join('')}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="p-2">価格</td>
+                            ${items.map(p => `<td class="p-2 ${p.itemPrice===best.price?'bg-yellow-50 ring-1 ring-yellow-200':''}">¥${p.itemPrice.toLocaleString()}</td>`).join('')}
+                        </tr>
+                        <tr>
+                            <td class="p-2">評価</td>
+                            ${items.map(p => `<td class="p-2 ${p.reviewAverage===best.rating?'bg-yellow-50 ring-1 ring-yellow-200':''}">⭐ ${p.reviewAverage}</td>`).join('')}
+                        </tr>
+                        <tr>
+                            <td class="p-2">レビュー件数</td>
+                            ${items.map(p => `<td class="p-2 ${p.reviewCount===best.reviews?'bg-yellow-50 ring-1 ring-yellow-200':''}">${p.reviewCount.toLocaleString()}件</td>`).join('')}
+                        </tr>
+                        <tr>
+                            <td class="p-2">タグ</td>
+                            ${items.map(p => `<td class="p-2">${p.tags.map(t=>`<span class='chip'>${t}</span>`).join(' ')}</td>`).join('')}
+                        </tr>
+                    </tbody>
+                </table>
+            `;
+            document.getElementById('compare-body').innerHTML = html;
+            modalBackdrop.style.display = 'flex';
+        }
+
+        function refreshChart(list) {
+            const ctx = document.getElementById('productsChart').getContext('2d');
+            const dataPoints = list.map((p, i) => ({
+                x: p.itemPrice,
+                y: p.reviewAverage,
+                r: Math.max(5, Math.sqrt(p.reviewCount) / 10),
+                label: `[${i+1}位] ${p.itemName}`,
+                id: productId(p)
+            }));
+            if (!productsChart) {
+                productsChart = new Chart(ctx, {
+                    type: 'bubble',
+                    data: { datasets: [{ label: '商品', data: dataPoints, backgroundColor: 'rgba(168, 135, 103, 0.6)', borderColor: 'rgba(168, 135, 103, 1)', borderWidth: 1 }] },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: { label: (ctx) => [ `${ctx.raw.label}`, `価格: ${ctx.raw.x.toLocaleString()}円`, `評価: ${ctx.raw.y}` ] }
+                            }
+                        },
+                        onClick: (_, elements) => {
+                            if (elements.length) {
+                                const idx = elements[0].index; const el = document.getElementById(`card-${idx+1}`); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                            }
+                        },
+                        scales: {
+                            x: { title: { display: true, text: '価格（円）', font: { size: 14 } }, ticks: { callback: (v) => v.toLocaleString() } },
+                            y: { title: { display: true, text: 'レビュー評価', font: { size: 14 } }, min: 4.0, max: 4.6 },
+                        }
+                    }
+                });
+            } else {
+                productsChart.data.datasets[0].data = dataPoints;
+                productsChart.update();
             }
         }
 
@@ -243,74 +615,93 @@
         sortButtons.rank.addEventListener('click', () => displayResults('rank'));
         sortButtons.price.addEventListener('click', () => displayResults('price'));
         sortButtons.review.addEventListener('click', () => displayResults('review'));
-
-
-        // Chart.js
-        const ctx = document.getElementById('productsChart').getContext('2d');
-        const chartData = productsData.map(p => ({
-            x: p.itemPrice,
-            y: p.reviewAverage,
-            r: Math.max(5, Math.sqrt(p.reviewCount) / 10), // レビュー数を円の半径に反映（最小半径5）
-            label: `[${p.rank}位] ${p.itemName}`
-        }));
-
-        const productsChart = new Chart(ctx, {
-            type: 'bubble',
-            data: {
-                datasets: [{
-                    label: '商品',
-                    data: chartData,
-                    backgroundColor: 'rgba(168, 135, 103, 0.6)',
-                    borderColor: 'rgba(168, 135, 103, 1)',
-                    borderWidth: 1,
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                const dataPoint = context.raw;
-                                return [
-                                    `${dataPoint.label}`,
-                                    `価格: ${dataPoint.x.toLocaleString()}円`,
-                                    `評価: ${dataPoint.y}`,
-                                ];
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        title: {
-                            display: true,
-                            text: '価格（円）',
-                            font: { size: 14 }
-                        },
-                        ticks: {
-                            callback: function(value) { return value.toLocaleString() }
-                        }
-                    },
-                    y: {
-                        title: {
-                            display: true,
-                            text: 'レビュー評価',
-                            font: { size: 14 }
-                        },
-                         min: 4.0, // 評価の最小値を調整して見やすくする
-                         max: 4.6
-                    }
-                }
-            }
+        btnSortScore.addEventListener('click', () => displayResults('score'));
+        btnReset.addEventListener('click', () => {
+            state.query = '';
+            state.priceMin = priceBounds.min; state.priceMax = priceBounds.max;
+            state.ratingMin = 0; state.reviewMin = 0; state.onlyFavorites = false; state.selectedTags.clear();
+            searchBox.value = ''; priceMinInput.value = state.priceMin; priceMaxInput.value = state.priceMax;
+            filterRating.value = 0; labelRating.textContent = '0.0';
+            filterReview.value = 0; labelReview.textContent = '0';
+            Array.from(tagsContainer.children).forEach(el=>el.classList.remove('chip-selected'));
+            favOnlyCheckbox.checked = false;
+            displayResults('rank');
         });
 
-        // Initial display
-        displayResults('rank');
+        const syncPriceQuick = () => {
+            // クイックスライダー: 右ほど安価寄り（下位x%の価格帯へMaxを合わせる）
+            const t = Number(priceRangeQuick.value) / 100; // 0..1
+            const span = priceBounds.max - priceBounds.min;
+            state.priceMin = priceBounds.min;
+            state.priceMax = Math.round(priceBounds.max - span * t);
+            priceMinInput.value = state.priceMin; priceMaxInput.value = state.priceMax;
+        };
+
+        searchBox.addEventListener('input', debounce((e) => { state.query = e.target.value; displayResults(state.sortKey); }));
+        priceMinInput.addEventListener('change', (e) => { state.priceMin = Number(e.target.value); displayResults(state.sortKey); });
+        priceMaxInput.addEventListener('change', (e) => { state.priceMax = Number(e.target.value); displayResults(state.sortKey); });
+        priceRangeQuick.addEventListener('input', () => { syncPriceQuick(); displayResults(state.sortKey); });
+        filterRating.addEventListener('input', (e) => { state.ratingMin = Number(e.target.value); labelRating.textContent = state.ratingMin.toFixed(1); displayResults(state.sortKey); });
+        filterReview.addEventListener('input', (e) => { state.reviewMin = Number(e.target.value); labelReview.textContent = state.reviewMin.toLocaleString(); displayResults(state.sortKey); });
+        favOnlyCheckbox.addEventListener('change', (e) => { state.onlyFavorites = e.target.checked; displayResults(state.sortKey); });
+        btnCompare.addEventListener('click', openCompareModal);
+        btnCompareClear.addEventListener('click', () => { compareSet.clear(); updateCompareBar(); document.querySelectorAll('.compare-checkbox').forEach(x=>x.checked=false); });
+        modalBackdrop.addEventListener('click', (e) => { if (e.target === modalBackdrop) modalBackdrop.style.display = 'none'; });
+        modalBackdrop.querySelector('#modal-close').addEventListener('click', () => modalBackdrop.style.display = 'none');
+
+        // ダークモード
+        const applyTheme = (t) => {
+            if (t === 'dark') document.documentElement.classList.add('dark');
+            else document.documentElement.classList.remove('dark');
+            btnDarkToggle.textContent = document.documentElement.classList.contains('dark') ? '☀️ ライト' : '🌙 ダーク';
+            btnDarkToggle.setAttribute('aria-pressed', document.documentElement.classList.contains('dark'));
+        };
+        const preferred = getTheme() || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        applyTheme(preferred);
+        btnDarkToggle.addEventListener('click', () => {
+            const isDark = document.documentElement.classList.toggle('dark');
+            setTheme(isDark ? 'dark' : 'light');
+            btnDarkToggle.textContent = isDark ? '☀️ ライト' : '🌙 ダーク';
+            displayResults(state.sortKey);
+        });
+
+        // PWA install
+        let deferredPrompt = null;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault(); deferredPrompt = e; btnInstall.classList.remove('hidden');
+        });
+        btnInstall.addEventListener('click', async () => { if (!deferredPrompt) return; deferredPrompt.prompt(); await deferredPrompt.userChoice; deferredPrompt = null; btnInstall.classList.add('hidden'); });
+
+        // SW 登録
+        if ('serviceWorker' in navigator) { navigator.serviceWorker.register('../../sw.js').catch(()=>{}); }
+
+
+        // 初期チャートは displayResults 内で生成
+
+        // 初期表示
+        (function initFromState(){
+            const saved = getState();
+            if (saved) {
+                state.sortKey = saved.sortKey || 'rank';
+                state.query = saved.query || '';
+                state.priceMin = saved.priceMin ?? priceBounds.min;
+                state.priceMax = saved.priceMax ?? priceBounds.max;
+                state.ratingMin = saved.ratingMin || 0;
+                state.reviewMin = saved.reviewMin || 0;
+                state.onlyFavorites = saved.onlyFavorites || false;
+                state.selectedTags = new Set(saved.selectedTags || []);
+                // 反映
+                searchBox.value = state.query;
+                priceMinInput.value = state.priceMin; priceMaxInput.value = state.priceMax;
+                filterRating.value = state.ratingMin; labelRating.textContent = state.ratingMin.toFixed(1);
+                filterReview.value = state.reviewMin; labelReview.textContent = state.reviewMin.toLocaleString();
+                Array.from(tagsContainer.children).forEach(el => { if (state.selectedTags.has(el.textContent)) el.classList.add('chip-selected'); });
+                favOnlyCheckbox.checked = state.onlyFavorites;
+            }
+            displayResults(state.sortKey);
+            // ハッシュリンク対応
+            if (location.hash.startsWith('#card-')) { const el = document.querySelector(location.hash); if (el) setTimeout(()=>el.scrollIntoView({behavior:'smooth'}), 300); }
+        })();
     </script>
     
     <!-- 読み込み完了後にbodyを表示するためのスクリプト -->
