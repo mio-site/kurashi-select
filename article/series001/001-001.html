@@ -67,6 +67,7 @@
         .modal { max-width: 960px; width: calc(100% - 2rem); background: var(--card); color: var(--text); border-radius: 16px; box-shadow: 0 25px 50px rgba(0,0,0,0.2); }
         .range { accent-color: var(--primary); }
         .btn { cursor: pointer; }
+        .highlight-ring { box-shadow: 0 0 0 4px rgba(168,135,103,0.45) inset; transition: box-shadow .3s ease; }
     </style>
 </head>
 <body class="antialiased" style="display: none;">
@@ -83,6 +84,15 @@
             <p class="text-base md:text-lg leading-relaxed">
                 「みんなが何を買っているの？」「本当に良い商品はどれ？」夏のファッション選びは、選択肢が多すぎて迷ってしまいます。このガイドでは、楽天市場の最新ランキングデータを基に、「価格」「レビュー評価」「人気度（レビュー数）」を徹底分析。あなたの価値観に合った最高の1着を見つけるための、インタラクティブな旅にご案内します。
             </p>
+        </section>
+
+        <!-- 総合トップ3（ファーストビュー強化） -->
+        <section id="top3" class="mb-10 md:mb-14">
+            <div class="max-w-4xl mx-auto text-center mb-4">
+                <h2 class="text-2xl md:text-3xl font-bold mb-2">総合トップ3</h2>
+                <p class="text-xs md:text-sm text-muted">人気・評価・価格のバランスで厳選。まずはここから。</p>
+            </div>
+            <div id="top3-container" class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8"></div>
         </section>
 
         <!-- コントロールパネル -->
@@ -135,17 +145,22 @@
         </section>
 
         <section id="chart-analysis" class="mb-16 md:mb-24">
-            <div class="max-w-4xl mx-auto text-center mb-8">
-                <h2 class="text-2xl md:text-3xl font-bold mb-4">ランキングの全体像：人気と価格のマップ</h2>
-                <p class="text-base md:text-lg leading-relaxed">
-                    まずは、TOP10にランクインした商品がどのような評価を得ているのか見てみましょう。下のグラフは、横軸が「価格」、縦軸が「レビュー評価」、そして円の大きさが「レビュー数（人気の証明）」を示しています。<strong>右上にあり、円が大きい商品ほど「価格に見合った高い評価と絶大な人気を誇る」</strong>アイテムと言えます。
-                </p>
+            <div class="max-w-4xl mx-auto text-center mb-4">
+                <h2 class="text-2xl md:text-3xl font-bold mb-2">ランキングの全体像：人気と価格のマップ</h2>
+                <p class="text-sm md:text-base text-muted">右上かつ円が大きいほど「人気も評価も高い」傾向。点をタップすると該当カードへ移動します。</p>
             </div>
-            <div class="bg-white p-4 sm:p-6 md:p-8 rounded-2xl card-shadow max-w-4xl mx-auto">
-                <div class="chart-container">
-                    <canvas id="productsChart"></canvas>
+            <details class="max-w-4xl mx-auto bg-white rounded-2xl card-shadow">
+                <summary class="list-none cursor-pointer p-4 sm:p-5 md:p-6 flex items-center justify-between">
+                    <span class="font-semibold text-primary">人気×価格の関係を見る（グラフを開く）</span>
+                    <span class="text-xs text-muted">理解の助けに。買い物は下のリストからすぐ可能です。</span>
+                </summary>
+                <div class="p-4 sm:p-6 md:p-8 pt-0">
+                    <div class="chart-container">
+                        <canvas id="productsChart"></canvas>
+                    </div>
+                    <p class="mt-4 text-[11px] text-muted">データ更新: <span id="data-updated"></span>｜出典: 楽天市場ランキング｜算出: 価格・評価・人気の総合</p>
                 </div>
-            </div>
+            </details>
         </section>
 
         <section id="interactive-selection" class="mb-16 md:mb-24">
@@ -154,14 +169,14 @@
                 <p class="text-base md:text-lg leading-relaxed mb-8">
                     価値観は人それぞれ。あなたの探し方に合わせて、商品をご紹介します。下のボタンから、あなたの考えに近い方を選んでください。
                 </p>
-                <div class="flex flex-col sm:flex-row justify-center gap-4">
-                    <button id="btn-sort-rank" class="w-full sm:w-auto bg-primary text-white font-bold py-3 px-8 rounded-full transition-all transform-gpu hover:scale-105 card-shadow-hover ring-2 ring-offset-2 ring-primary">
+                <div class="flex flex-col sm:flex-row justify-center gap-4" role="tablist" aria-label="並び替え">
+                    <button id="btn-sort-rank" role="tab" aria-selected="true" class="w-full sm:w-auto bg-primary text-white font-bold py-3 px-8 rounded-full transition-all transform-gpu hover:scale-105 card-shadow-hover ring-2 ring-offset-2 ring-primary">
                         👑 人気ランキング順
                     </button>
-                    <button id="btn-sort-price" class="w-full sm:w-auto bg-accent text-white font-bold py-3 px-8 rounded-full transition-all transform-gpu hover:scale-105 card-shadow-hover">
+                    <button id="btn-sort-price" role="tab" aria-selected="false" class="w-full sm:w-auto bg-accent text-white font-bold py-3 px-8 rounded-full transition-all transform-gpu hover:scale-105 card-shadow-hover">
                         💰 価格が安い順
                     </button>
-                    <button id="btn-sort-review" class="w-full sm:w-auto bg-accent text-white font-bold py-3 px-8 rounded-full transition-all transform-gpu hover:scale-105 card-shadow-hover">
+                    <button id="btn-sort-review" role="tab" aria-selected="false" class="w-full sm:w-auto bg-accent text-white font-bold py-3 px-8 rounded-full transition-all transform-gpu hover:scale-105 card-shadow-hover">
                         ⭐ 評価が高い順
                     </button>
                 </div>
@@ -393,9 +408,10 @@
                                 比較
                             </label>
                             <button class="btn border rounded-lg px-3 py-2 text-sm share-btn" data-rank="${product.rank}" data-name="${product.itemName}">共有</button>
-                            <a href="${product.affiliateUrl}" target="_blank" rel="noopener noreferrer" class="block w-full text-center bg-primary text-white font-bold py-3 px-4 rounded-lg hover:opacity-90 transition-opacity flex-1">
+                            <a href="${product.affiliateUrl}" target="_blank" rel="sponsored nofollow noopener noreferrer" class="block w-full text-center bg-primary text-white font-bold py-3 px-4 rounded-lg hover:opacity-90 transition-opacity flex-1">
                             楽天でチェック
                         </a>
+                        <span class="text-[11px] text-muted self-center">PR｜広告</span>
                         </div>
                     </div>
                 </div>
@@ -468,8 +484,8 @@
 
             // ボタン状態
             for (const key in sortButtons) {
-                if(key === sortKey) { sortButtons[key].classList.remove('bg-accent'); sortButtons[key].classList.add('bg-primary', 'ring-2', 'ring-offset-2'); }
-                else { sortButtons[key].classList.remove('bg-primary', 'ring-2', 'ring-offset-2'); sortButtons[key].classList.add('bg-accent'); }
+                if(key === sortKey) { sortButtons[key].classList.remove('bg-accent'); sortButtons[key].classList.add('bg-primary', 'ring-2', 'ring-offset-2'); sortButtons[key].setAttribute('aria-selected','true'); }
+                else { sortButtons[key].classList.remove('bg-primary', 'ring-2', 'ring-offset-2'); sortButtons[key].classList.add('bg-accent'); sortButtons[key].setAttribute('aria-selected','false'); }
             }
 
             // おすすめ順ボタン
@@ -586,7 +602,13 @@
                         },
                         onClick: (_, elements) => {
                             if (elements.length) {
-                                const idx = elements[0].index; const el = document.getElementById(`card-${idx+1}`); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                const idx = elements[0].index;
+                                const el = document.getElementById(`card-${idx+1}`);
+                                if (el) {
+                                    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                    el.classList.add('highlight-ring');
+                                    setTimeout(()=>el.classList.remove('highlight-ring'), 1800);
+                                }
                             }
                         },
                         scales: {
@@ -701,6 +723,67 @@
             displayResults(state.sortKey);
             // ハッシュリンク対応
             if (location.hash.startsWith('#card-')) { const el = document.querySelector(location.hash); if (el) setTimeout(()=>el.scrollIntoView({behavior:'smooth'}), 300); }
+        })();
+
+        // データ更新日表示
+        document.getElementById('data-updated').textContent = new Date().toISOString().slice(0,10);
+
+        // 総合トップ3（scoreベース）
+        (function renderTop3(){
+            const list = computeScores([...augmented]).sort((a,b)=> b.score - a.score).slice(0,3);
+            const el = document.getElementById('top3-container');
+            el.innerHTML = list.map(p => `
+                <div class="bg-white rounded-2xl card-shadow card-shadow-hover transition-all transform-gpu">
+                    <img src="${p.imageUrl}" alt="${p.itemName}" loading="lazy" decoding="async" class="rounded-t-2xl w-full h-44 object-cover">
+                    <div class="p-5">
+                        <p class="text-xs text-gray-500">おすすめ</p>
+                        <h3 class="font-bold text-primary leading-tight mb-1">${p.itemName}</h3>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-lg font-bold text-accent">¥${p.itemPrice.toLocaleString()}</span>
+                            <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded-full">⭐ ${p.reviewAverage}</span>
+                        </div>
+                        <a href="${p.affiliateUrl}" target="_blank" rel="sponsored nofollow noopener noreferrer" class="block w-full text-center bg-primary text-white font-bold py-3 px-4 rounded-lg hover:opacity-90 transition-opacity">楽天でチェック</a>
+                        <span class="block text-center text-[11px] text-muted mt-1">PR｜広告</span>
+                    </div>
+                </div>
+            `).join('');
+        })();
+
+        // JSON-LD（ItemList）
+        (function injectJsonLd(){
+            try {
+                const itemList = {
+                    '@context': 'https://schema.org',
+                    '@type': 'ItemList',
+                    'itemListElement': productsData.map((p, idx)=>({
+                        '@type': 'ListItem',
+                        'position': idx + 1,
+                        'url': p.affiliateUrl,
+                        'item': {
+                            '@type': 'Product',
+                            'name': p.itemName,
+                            'image': p.imageUrl,
+                            'description': p.catchcopy,
+                            'aggregateRating': {
+                                '@type': 'AggregateRating',
+                                'ratingValue': p.reviewAverage,
+                                'reviewCount': p.reviewCount
+                            },
+                            'offers': {
+                                '@type': 'Offer',
+                                'priceCurrency': 'JPY',
+                                'price': p.itemPrice,
+                                'url': p.affiliateUrl,
+                                'availability': 'https://schema.org/InStock'
+                            }
+                        }
+                    }))
+                };
+                const s = document.createElement('script');
+                s.type = 'application/ld+json';
+                s.text = JSON.stringify(itemList);
+                document.head.appendChild(s);
+            } catch {}
         })();
     </script>
     

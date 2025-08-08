@@ -61,7 +61,7 @@
         </header>
         
         <div class="max-w-4xl mx-auto mb-12 md:mb-20">
-            <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/unboxroom/cabinet/sw/sw-p20/sw-p20main2.jpg" alt="Monomam スマートウォッチ Primo" class="rounded-2xl w-full card-shadow">
+            <img src="https://thumbnail.image.rakuten.co.jp/@0_mall/unboxroom/cabinet/sw/sw-p20/sw-p20main2.jpg" alt="Monomam スマートウォッチ Primo" class="rounded-2xl w-full card-shadow" loading="lazy" decoding="async">
         </div>
 
         <section id="intro" class="max-w-3xl mx-auto text-center mb-16 md:mb-24">
@@ -209,9 +209,10 @@
             }
             recommendationText.innerHTML = text + `
                 <div class="mt-6 text-center">
-                    <a href="${productData.affiliateUrl}" target="_blank" rel="noopener noreferrer" class="affiliate-button font-bold py-3 px-8 rounded-full">
+                    <a href="${productData.affiliateUrl}" target="_blank" rel="sponsored nofollow noopener noreferrer" class="affiliate-button font-bold py-3 px-8 rounded-full">
                         楽天で詳細とレビュー(${productData.reviewCount.toLocaleString()}件)を見る
                     </a>
+                    <span class="block text-[11px] text-gray-500 mt-1">PR｜広告</span>
                 </div>
             `;
             conclusionSection.classList.remove('hidden');
@@ -265,6 +266,21 @@
                 }
             }
         });
+
+        // JSON-LD（Product）
+        (function injectJsonLd(){
+            try {
+                const data = {
+                    '@context': 'https://schema.org',
+                    '@type': 'Product',
+                    name: productData.name,
+                    image: 'https://thumbnail.image.rakuten.co.jp/@0_mall/unboxroom/cabinet/sw/sw-p20/sw-p20main2.jpg',
+                    aggregateRating: { '@type': 'AggregateRating', ratingValue: productData.reviewAverage, reviewCount: productData.reviewCount },
+                    offers: { '@type':'Offer', priceCurrency:'JPY', price: productData.price, url: productData.affiliateUrl, availability: 'https://schema.org/InStock' }
+                };
+                const s = document.createElement('script'); s.type='application/ld+json'; s.text=JSON.stringify(data); document.head.appendChild(s);
+            } catch {}
+        })();
     </script>
 
     <!-- 読み込み完了後にbodyを表示するためのスクリプト -->
