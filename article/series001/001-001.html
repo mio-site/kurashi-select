@@ -66,7 +66,7 @@
         .chart-container { position: relative; height: 450px; width: 100%;}
         .dark .bg-white { background-color: var(--card); }
         .dark .text-gray-600 { color: var(--muted); }
-        .chip { border: 1px solid #E5E7EB; padding: 6px 10px; border-radius: 9999px; font-size: 13px; background: #fff; color: #374151; white-space: nowrap; }
+        .chip { display: inline-flex; align-items: center; border: 1px solid #E5E7EB; padding: 6px 10px; border-radius: 9999px; font-size: 13px; background: #fff; color: #374151; white-space: nowrap; }
         a.chip, button.chip { cursor: pointer; transition: box-shadow .2s ease, transform .08s ease; }
         a.chip:hover, button.chip:hover { box-shadow: 0 8px 18px rgba(0,0,0,0.06); transform: translateY(-1px); }
         .chip-selected { outline: 2px solid var(--primary); background-color: rgba(37, 99, 235, 0.08); }
@@ -280,11 +280,11 @@
             <div class="max-w-4xl mx-auto text-center mb-4">
                 <h2 class="text-2xl md:text-3xl font-bold mb-2">ママが選ぶ！総合トップ3</h2>
                 <p class="text-sm md:text-base text-gray-700">まずここを見ればOK。機能性・体型カバー・コスパの“総合点が高い”3品です。</p>
-                <div class="text-sm md:text-base text-gray-700 mt-2">
+                <div class="text-sm md:text-base text-gray-700 mt-2 flex flex-wrap items-center justify-center gap-2">
                     <span class="chip">品質(評価) 33%</span>
                     <span class="chip">コスパ(価格) 34%</span>
                     <span class="chip">人気(レビュー) 33%</span>
-                    <span class="ml-2 text-muted">独自スコアで算出</span>
+                    <span class="text-muted">独自スコアで算出</span>
                 </div>
             </div>
             <div id="top3-container" class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8"></div>
