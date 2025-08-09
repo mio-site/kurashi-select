@@ -66,7 +66,9 @@
         .chart-container { position: relative; height: 450px; width: 100%;}
         .dark .bg-white { background-color: var(--card); }
         .dark .text-gray-600 { color: var(--muted); }
-        .chip { border: 1px solid #E5E7EB; padding: 6px 10px; border-radius: 9999px; font-size: 13px; background: #fff; color: #374151; }
+        .chip { border: 1px solid #E5E7EB; padding: 6px 10px; border-radius: 9999px; font-size: 13px; background: #fff; color: #374151; white-space: nowrap; }
+        a.chip, button.chip { cursor: pointer; transition: box-shadow .2s ease, transform .08s ease; }
+        a.chip:hover, button.chip:hover { box-shadow: 0 8px 18px rgba(0,0,0,0.06); transform: translateY(-1px); }
         .chip-selected { outline: 2px solid var(--primary); background-color: rgba(37, 99, 235, 0.08); }
         .sticky-bar { position: sticky; bottom: 12px; z-index: 40; }
         .floating { position: fixed; right: 16px; bottom: 16px; z-index: 50; }
@@ -75,6 +77,14 @@
         .range { accent-color: var(--primary); }
         .btn { cursor: pointer; }
         .highlight-ring { box-shadow: 0 0 0 4px rgba(37,99,235,0.35) inset; transition: box-shadow .3s ease; }
+        /* アクションUI（カード下部） */
+        .btn-chip { display:inline-flex; align-items:center; gap:8px; height:40px; padding:0 12px; border:1px solid #E5E7EB; border-radius:10px; background:#fff; color:#374151; font-size:14px; }
+        .btn-chip:hover { box-shadow: 0 8px 18px rgba(0,0,0,0.06); }
+        .btn-chip input[type="checkbox"]{ width:18px; height:18px; accent-color: var(--primary); }
+        .dark .btn-chip { background: var(--card); color: var(--text); border-color: rgba(148,163,184,0.35); }
+        .actions-row { display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; }
+        .action-link { display:inline-flex; align-items:center; gap:6px; padding:8px 10px; border-radius:8px; background: rgba(37,99,235,0.08); color: var(--primary); font-weight:700; }
+        .action-link:hover{ background: rgba(37,99,235,0.14); text-decoration:none; }
         /* 強調CTAカラー */
         :root { --cta: #F59E0B; }
         .dark { --cta: #F3B34D; }
@@ -89,6 +99,18 @@
         .dark .table-striped tbody tr:nth-child(even) { background-color: rgba(255,255,255,0.04); }
         /* TOC スクロール */
         .toc-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+        /* 「こんなお悩み」リストの視認性改善（大きめチェック） */
+        #intro ul { list-style: none; padding-left: 0; }
+        #intro ul li { position: relative; padding-left: 1.75rem; }
+        #intro ul li::before { content: ''; position: absolute; left: 0; top: .55em; width: 14px; height: 14px; border: 2px solid var(--primary); border-radius: 3px; background: transparent; }
+        .dark #intro ul li::before { border-color: var(--primary); }
+
+        /* トップ3カードのモバイル崩れ対策 */
+        #top3-container > div { display: flex; flex-direction: column; height: 100%; }
+        #top3-container img { aspect-ratio: 1 / 1; object-fit: contain; }
+        #top3-container .p-5, #top3-container .p-6 { display: flex; flex-direction: column; gap: .5rem; flex: 1; }
+        #top3-container a.btn-cta { margin-top: auto; }
 
         /* アクセシビリティ: フォーカスリング/リンク */
         a { color: var(--primary); }
@@ -135,7 +157,8 @@
         body.has-header { padding-top: 56px; }
 
         /* --- 追加: 右サイドTOC（デスクトップ限定） --- */
-        .right-toc { display: none; position: fixed; top: 96px; right: 16px; width: 220px; max-height: calc(100vh - 140px); overflow: auto; padding: 12px; border-radius: 12px; background: rgba(255,255,255,0.78); backdrop-filter: blur(10px); border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 8px 24px rgba(0,0,0,0.06); z-index: 40; }
+        .right-toc { display: none; position: fixed; top: 96px; right: 16px; width: 220px; max-height: calc(100vh - 140px); overflow: auto; padding: 12px; border-radius: 12px; background: rgba(255,255,255,0.78); backdrop-filter: blur(10px); border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 8px 24px rgba(0,0,0,0.06); z-index: 40; transition: opacity .2s ease, transform .2s ease; }
+        .right-toc.hidden { opacity: 0; pointer-events: none; transform: translateX(8px); }
         .right-toc h3 { font-size: 14px; font-weight: 700; margin-bottom: 8px; color: var(--primary); }
         .right-toc a { display: block; padding: 8px 10px; border-radius: 8px; color: inherit; text-decoration: none; font-size: 14px; }
         .right-toc a:hover { background: rgba(37,99,235,0.08); }
@@ -143,6 +166,12 @@
         .dark .right-toc { background: rgba(11,18,32,0.65); border-color: rgba(148,163,184,0.35); }
         /* 1280px以上で表示。コンテンツの外に寄せつつ、画面端から16pxは確保 */
         @media (min-width: 1280px){ .right-toc{ display: block; right: auto; left: min(calc(100vw - 16px - 220px), calc(50% + 600px + 16px)); } }
+        
+        /* 目次トグル（デスクトップのみ） */
+        .toc-toggle { position: fixed; top: 96px; right: 16px; width: 42px; height: 42px; border: 1px solid rgba(0,0,0,0.08); border-radius: 9999px; display: none; align-items: center; justify-content: center; background: rgba(37,99,235,0.85); color: #fff; box-shadow: 0 8px 24px rgba(0,0,0,0.08); z-index: 41; cursor: pointer; }
+        .toc-toggle:hover{ filter: brightness(1.05); }
+        .dark .toc-toggle{ background: rgba(147,197,253,0.85); color: #0b1220; border-color: rgba(148,163,184,0.35); }
+        @media (min-width: 1280px){ .toc-toggle{ display: inline-flex; right: auto; left: min(calc(100vw - 16px - 42px), calc(50% + 600px + 16px)); } }
     </style>
 </head>
 <body id="top" class="antialiased" style="display: none;">
@@ -170,6 +199,7 @@
         <a href="#faq">❓ FAQ</a>
         <a href="#conclusion">✅ まとめ</a>
     </nav>
+    <button id="toc-toggle" class="toc-toggle" aria-label="ページ内目次を表示/隠す">目次</button>
 
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
 
@@ -217,10 +247,10 @@
             <h2 class="text-2xl md:text-3xl font-bold mb-4">こんなお悩みはありませんか？</h2>
             <div class="bg-stone-50 p-6 rounded-xl mb-6 text-left">
                 <ul class="space-y-2 text-gray-700">
-                    <li>☐ 子育てで忙しくて、おしゃれに時間をかけられない</li>
-                    <li>☐ 体型が気になる。上手に隠せる服がほしい</li>
-                    <li>☐ UVカットや冷感などの機能も大事。でも見た目も妥協したくない</li>
-                    <li>☐ コスパ重視。洗濯に強くて長く使える一着を選びたい</li>
+                    <li>子育てで忙しくて、おしゃれに時間をかけられない</li>
+                    <li>体型が気になる。上手に隠せる服がほしい</li>
+                    <li>UVカットや冷感などの機能も大事。でも見た目も妥協したくない</li>
+                    <li>コスパ重視。洗濯に強くて長く使える一着を選びたい</li>
                 </ul>
             </div>
             <p class="text-base md:text-lg leading-relaxed">
@@ -793,19 +823,12 @@
                          <div id="details-${product.rank}" class="text-base leading-relaxed text-gray-700 bg-stone-50 p-3 rounded-lg hidden mb-4">
                             <p>${product.description}</p>
                         </div>
-                        <button onclick="toggleDetails(${product.rank})" class="w-full text-center bg-primary text-white font-bold py-3 rounded-lg hover:brightness-95 transition-colors" aria-label="${product.itemName} の詳細を表示">
-                            詳細を見る
-                        </button>
-                        <div class="flex gap-2 mt-3 items-center">
-                            <label class="inline-flex items-center gap-2 text-sm border rounded-lg px-3 py-2" style="min-height:44px;">
-                                <input type="checkbox" class="compare-checkbox" data-id="${product.itemName}" aria-label="${product.itemName} を比較に追加">
-                                比較
-                            </label>
-                            <button class="btn border rounded-lg px-3 py-2 text-sm share-btn" style="min-width:44px;min-height:44px;" data-rank="${product.rank}" data-name="${product.itemName}" aria-label="${product.itemName} を共有">共有</button>
+                        <button onclick="toggleDetails(${product.rank})" class="w-full text-center bg-primary text-white font-bold py-3 rounded-lg hover:brightness-95 transition-colors" aria-label="${product.itemName} の詳細を表示">詳細を見る</button>
+                        <div class="actions-row mt-3">
+                            <label class="btn-chip"><input type="checkbox" class="compare-checkbox" data-id="${product.itemName}" aria-label="${product.itemName} を比較に追加"><span>比較</span></label>
+                            <button class="btn-chip share-btn" data-rank="${product.rank}" data-name="${product.itemName}" aria-label="${product.itemName} を共有">共有</button>
                             ${detailLinkHtml}
-                            <a href="${product.affiliateUrl}" target="_blank" rel="sponsored nofollow noopener noreferrer" class="block w-full text-center btn-cta font-bold py-3 px-4 rounded-lg hover:opacity-95 hover:brightness-110 transition" aria-label="楽天で価格と在庫を確認">
-                                楽天で価格・在庫を確認
-                            </a>
+                            <a href="${product.affiliateUrl}" target="_blank" rel="sponsored nofollow noopener noreferrer" class="flex-1 block text-center btn-cta font-bold py-3 px-4 rounded-lg hover:opacity-95 hover:brightness-110 transition" aria-label="楽天で価格と在庫を確認">楽天で価格・在庫を確認</a>
                             <span class="text-[11px] text-muted self-center">PR｜広告</span>
                         </div>
                     </div>
@@ -1209,9 +1232,9 @@
                         <h3 class="font-bold text-primary leading-tight mb-1">${p.itemName}</h3>
                         <div class="flex items-center justify-between mb-3">
                             <span class="text-lg font-bold text-accent">¥${p.itemPrice.toLocaleString()}</span>
-                            <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded-full">⭐ ${p.reviewAverage}</span>
+                            <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded-full" aria-label="平均評価 ${p.reviewAverage}">⭐ ${p.reviewAverage}</span>
                         </div>
-                        <a href="${p.affiliateUrl}" target="_blank" rel="sponsored nofollow noopener noreferrer" class="block w-full text-center btn-cta font-bold py-3 px-4 rounded-lg hover:opacity-95 hover:brightness-110 transition">楽天で価格・在庫を確認</a>
+                        <a href="${p.affiliateUrl}" target="_blank" rel="sponsored nofollow noopener noreferrer" class="block w-full text-center btn-cta font-bold py-3 px-4 rounded-lg hover:opacity-95 hover:brightness-110 transition" aria-label="${p.itemName} を楽天で見る（新しいタブで開きます）">楽天で価格・在庫を確認</a>
                         <span class="block text-center text-[11px] text-muted mt-1">PR｜広告</span>
                     </div>
                 </div>
@@ -1487,6 +1510,21 @@
             (function rightTocSpy(){
                 const toc = document.getElementById('right-toc');
                 if (!toc) return;
+                const toggle = document.getElementById('toc-toggle');
+                // 初期は閉じた状態にして視覚ノイズを減らす
+                toc.classList.add('hidden');
+                if (toggle) {
+                    let open = false;
+                    const setPos = () => {
+                        // 1280px以上の位置合わせはCSSに依存。ここでは何もしない
+                    };
+                    toggle.addEventListener('click', () => {
+                        open = !open;
+                        toc.classList.toggle('hidden', !open);
+                        toggle.setAttribute('aria-pressed', String(open));
+                    });
+                    window.addEventListener('resize', setPos);
+                }
                 const links = Array.from(toc.querySelectorAll('a[href^="#"]'));
                 const ids = links.map(a => a.getAttribute('href').slice(1));
                 const update = () => {
