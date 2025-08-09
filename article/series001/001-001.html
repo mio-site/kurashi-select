@@ -2,10 +2,10 @@
 <html lang="ja">
 <head>
     <meta charset="utf-8">
-    <title>【2025年最新】ママ向け｜楽天レディースファッション・高機能×体型カバーの推し10選</title>
+    <title>【2025年最新】ママ向け｜楽天レディースファッション・高機能×体型カバーのおすすめ10選</title>
 
     <!-- SEO & Viewport Meta Tags -->
-    <meta name="description" content="子育て世代のママ向け！楽天レディースファッションで実際に売れている機能性＋体型カバー力抜群のアイテムTOP10。UVカット・冷感・授乳対応など忙しいママの味方商品を価格・評価・人気度で徹底比較分析。">
+    <meta name="description" content="忙しいママ向け。保育園送迎・公園・お出かけに“ラクしてきれい見え”。UVカット・冷感・体型カバー・洗濯に強い等、実売データで選んだ失敗しにくい楽天レディースTOP10を価格・評価・人気で比較。">
     <meta content='width=device-width,initial-scale=1.0,minimum-scale=1.0' name='viewport'/>
     <meta name="theme-color" content="#A88767">
 
@@ -18,6 +18,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <!-- 共通ルート設定 -->
+    <script src="../../routes.js"></script>
 
     <!-- Stylesheets (CSS 遅延読み込みを適用) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -80,8 +82,8 @@
         .text-cta { color: var(--cta); }
         .btn-cta { background-color: var(--cta); color: #fff; }
         /* 行の折りたたみ（商品名短縮） */
-        .line-clamp-2 { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
-        .line-clamp-3 { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
+        .line-clamp-2 { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; }
+        .line-clamp-3 { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-clamp: 3; overflow: hidden; }
         /* 比較表のストライプ */
         .table-striped tbody tr:nth-child(even) { background-color: rgba(0,0,0,0.035); }
         .dark .table-striped tbody tr:nth-child(even) { background-color: rgba(255,255,255,0.04); }
@@ -104,32 +106,125 @@
         /* FAQ 開状態の視覚的差分 */
         #faq details[open] { background: rgba(37,99,235,0.04); }
         #faq summary { font-size: 1.05rem; }
+
+        /* SNS共有バー */
+        .share-bar { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+        .share-chip { display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; border: 1px solid #E5E7EB; border-radius: 9999px; background: #fff; color: #374151; }
+        .dark .share-chip { background: var(--card); color: var(--text); border-color: rgba(148,163,184,0.35); }
+        .share-chip:hover { box-shadow: 0 8px 18px rgba(0,0,0,0.06); transform: translateY(-1px); }
+        .share-chip svg { width: 18px; height: 18px; }
+        .icon-bg { display:inline-flex; width:22px; height:22px; border-radius:9999px; align-items:center; justify-content:center; color:#fff; }
+        .share-chip[data-share-action='x'] .icon-bg { background:#000; }
+        .share-chip[data-share-action='line'] .icon-bg { background:#06C755; }
+        .share-chip[data-share-action='copy'] .icon-bg { background:#6B7280; }
+        .share-chip[data-share-action='native'] .icon-bg { background: var(--primary); }
+
+        /* フローティング共有ボタン（スマホ） */
+        .floating-left { position: fixed; left: 16px; bottom: 16px; z-index: 50; }
+        
+        /* --- 追加: 極小グローバルヘッダー --- */
+        .site-header { position: fixed; inset-inline: 0; top: 0; z-index: 60; backdrop-filter: saturate(180%) blur(12px); transition: transform .25s ease, background-color .2s ease; }
+        .site-header-inner { display: flex; align-items: center; justify-content: space-between; gap: 12px; max-width: 1200px; margin: 0 auto; padding: 10px 16px; }
+        .site-header.hide { transform: translateY(-100%); }
+        .site-logo { font-weight: 800; letter-spacing: .2px; }
+        .site-nav { display: none; gap: 12px; }
+        .site-nav a { display: inline-flex; align-items: center; padding: 8px 10px; border-radius: 9999px; text-decoration: none; font-size: 14px; }
+        @media (min-width: 768px){ .site-nav{ display: inline-flex; } }
+        .dark .site-header { background-color: rgba(11, 18, 32, 0.72); }
+        .site-header { background-color: rgba(255,255,255,0.85); }
+        body.has-header { padding-top: 56px; }
+
+        /* --- 追加: 右サイドTOC（デスクトップ限定） --- */
+        .right-toc { display: none; position: fixed; top: 96px; right: 16px; width: 220px; max-height: calc(100vh - 140px); overflow: auto; padding: 12px; border-radius: 12px; background: rgba(255,255,255,0.78); backdrop-filter: blur(10px); border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 8px 24px rgba(0,0,0,0.06); z-index: 40; }
+        .right-toc h3 { font-size: 14px; font-weight: 700; margin-bottom: 8px; color: var(--primary); }
+        .right-toc a { display: block; padding: 8px 10px; border-radius: 8px; color: inherit; text-decoration: none; font-size: 14px; }
+        .right-toc a:hover { background: rgba(37,99,235,0.08); }
+        .right-toc a.active { background: rgba(37,99,235,0.12); font-weight: 700; }
+        .dark .right-toc { background: rgba(11,18,32,0.65); border-color: rgba(148,163,184,0.35); }
+        /* 1280px以上で表示。コンテンツの外に寄せつつ、画面端から16pxは確保 */
+        @media (min-width: 1280px){ .right-toc{ display: block; right: auto; left: min(calc(100vw - 16px - 220px), calc(50% + 600px + 16px)); } }
     </style>
 </head>
 <body id="top" class="antialiased" style="display: none;">
 
+    <!-- 極小グローバルヘッダー（スクロールで隠れる） -->
+    <div id="site-header" class="site-header">
+        <div class="site-header-inner">
+            <a href="../../index.html" class="site-logo text-primary">kurashi-select</a>
+            <nav class="site-nav" aria-label="グローバルナビ">
+                <a href="#toc">目次</a>
+                <a href="#interactive-selection">商品</a>
+                <a href="#faq">FAQ</a>
+                <a href="#conclusion">まとめ</a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- 右サイド目次（デスクトップ限定・ScrollSpy） -->
+    <nav id="right-toc" class="right-toc" aria-label="ページ内目次">
+        <h3>ページ内</h3>
+        <a href="#top3">👑 トップ3</a>
+        <a href="#controls">🔎 絞り込み</a>
+        <a href="#chart-analysis">📈 グラフ</a>
+        <a href="#interactive-selection">🛍 商品一覧</a>
+        <a href="#faq">❓ FAQ</a>
+        <a href="#conclusion">✅ まとめ</a>
+    </nav>
+
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
 
         <header class="text-center mb-12 md:mb-20">
-            <h1 class="text-3xl md:text-5xl font-bold text-primary mb-3">忙しいママの味方｜機能性×美しさを両立</h1>
-            <p class="text-xl md:text-2xl text-gray-700 mb-4">楽天で実際に売れている、子育て世代に選ばれる高機能レディースファッションTOP10</p>
+            <h1 class="text-3xl md:text-5xl font-bold text-primary mb-3">忙しいママの味方｜機能性×美しさで“時短おしゃれ”</h1>
+            <p class="text-xl md:text-2xl text-gray-700 mb-4">売れていてレビューも高い、失敗しにくい楽天レディースTOP10を厳選</p>
             <div class="flex justify-center">
                 <a href="#interactive-selection" class="btn-cta font-bold py-3 px-6 rounded-full shadow hover:opacity-95" aria-label="商品一覧へ移動">商品一覧へ</a>
             </div>
         </header>
+        
+        <!-- シェアバー（トップ） -->
+        <section id="share-top" class="max-w-4xl mx-auto mb-8 md:mb-12" aria-label="この記事を共有">
+            <div class="bg-white dark:bg-opacity-80 backdrop-blur-sm p-3 sm:p-4 rounded-2xl card-shadow">
+                <div class="share-bar" role="group" aria-label="共有ボタン">
+                    <button type="button" class="btn share-chip text-sm" data-share-action="native" aria-label="OSの共有シートを開く">
+                        <span class="icon-bg" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3v10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M8 7l4-4 4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="4" y="11" width="16" height="9" rx="2" stroke="currentColor" stroke-width="2"/></svg>
+                        </span>
+                        OSで共有
+                    </button>
+                    <button type="button" class="btn share-chip text-sm" data-share-action="x" aria-label="Xでシェア">
+                        <span class="icon-bg" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M4 4h4l4 6 4-6h4l-6.5 9L20 20h-4l-4-6-4 6H4l6.5-9L4 4z"/></svg>
+                        </span>
+                        Xでシェア
+                    </button>
+                    <button type="button" class="btn share-chip text-sm" data-share-action="line" aria-label="LINEで送る">
+                        <span class="icon-bg" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M20 11c0 4.418-4.03 8-9 8-1.036 0-2.03-.145-2.95-.412L4 20l1.59-3.18C4.62 15.53 4 13.83 4 12c0-4.418 4.03-8 9-8s7 3.582 7 7z"/><path fill="#fff" d="M9 9h2v6H9zM12.5 9H15c1.2 0 2 .8 2 2s-.8 2-2 2h-1v2h-1.5V9zm1.5 1.5V12h1c.4 0 .5-.3.5-.5s-.1-.5-.5-.5h-1z"/></svg>
+                        </span>
+                        LINEで送る
+                    </button>
+                    <button type="button" class="btn share-chip text-sm" data-share-action="copy" aria-label="リンクをコピー">
+                        <span class="icon-bg" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 17a4 4 0 0 1 0-6l4-4a4 4 0 1 1 6 6l-1 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 7a4 4 0 0 1 0 6l-4 4a4 4 0 1 1-6-6l1-1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </span>
+                        リンクをコピー
+                    </button>
+                </div>
+            </div>
+        </section>
 
         <section id="intro" class="max-w-3xl mx-auto text-center mb-10 md:mb-14">
             <h2 class="text-2xl md:text-3xl font-bold mb-4">こんなお悩みはありませんか？</h2>
             <div class="bg-stone-50 p-6 rounded-xl mb-6 text-left">
                 <ul class="space-y-2 text-gray-700">
-                    <li>☐ 子育てで忙しくて、お洒落に時間をかけられない</li>
-                    <li>☐ 体型が気になるけど、カバーできる服が見つからない</li>
-                    <li>☐ UVカットや機能性も欲しいけど、見た目も諦めたくない</li>
-                    <li>☐ コスパが良くて、長く使える服を選びたい</li>
+                    <li>☐ 子育てで忙しくて、おしゃれに時間をかけられない</li>
+                    <li>☐ 体型が気になる。上手に隠せる服がほしい</li>
+                    <li>☐ UVカットや冷感などの機能も大事。でも見た目も妥協したくない</li>
+                    <li>☐ コスパ重視。洗濯に強くて長く使える一着を選びたい</li>
                 </ul>
             </div>
             <p class="text-base md:text-lg leading-relaxed">
-                そんなママたちに選ばれているのが、この楽天TOP10アイテムです。実際の販売データと1万件を超えるレビューを分析し、<strong>機能性・体型カバー・高コスパ</strong>を実現した商品だけを厳選。忙しい毎日を、もっと快適で美しく変える一着がきっと見つかります。
+                このページでは、<strong>「売れている × レビューが高い」</strong>を軸に、<strong>機能性・体型カバー・コスパ</strong>の三拍子そろった“失敗しにくい”アイテムだけをまとめました。忙しい毎日でも、ラクにきれい見えが叶う一着がきっと見つかります。
             </p>
         </section>
 
@@ -154,12 +249,12 @@
         <section id="top3" class="mb-10 md:mb-14">
             <div class="max-w-4xl mx-auto text-center mb-4">
                 <h2 class="text-2xl md:text-3xl font-bold mb-2">ママが選ぶ！総合トップ3</h2>
-                <p class="text-sm md:text-base text-gray-700">機能性・体型カバー・コスパのバランスで厳選。迷ったらまずはここから。</p>
+                <p class="text-sm md:text-base text-gray-700">まずここを見ればOK。機能性・体型カバー・コスパの“総合点が高い”3品です。</p>
                 <div class="text-sm md:text-base text-gray-700 mt-2">
-                    <span class="chip">評価 33%</span>
-                    <span class="chip">コスパ 34%</span>
-                    <span class="chip">人気 33%</span>
-                    <span class="ml-2 text-muted">当サイト独自スコアで総合評価</span>
+                    <span class="chip">品質(評価) 33%</span>
+                    <span class="chip">コスパ(価格) 34%</span>
+                    <span class="chip">人気(レビュー) 33%</span>
+                    <span class="ml-2 text-muted">独自スコアで算出</span>
                 </div>
             </div>
             <div id="top3-container" class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8"></div>
@@ -216,8 +311,8 @@
 
         <section id="chart-analysis" class="mb-16 md:mb-24">
             <div class="max-w-4xl mx-auto text-center mb-4">
-                <h2 class="text-2xl md:text-3xl font-bold mb-2">商品の選び方：価格と評価の関係性</h2>
-                <p class="text-base md:text-lg text-gray-700">右上かつ円が大きいほど「高評価×人気」の商品。グラフの点をタップすると該当商品へ移動できます。</p>
+                <h2 class="text-2xl md:text-3xl font-bold mb-2">価格と評価の関係：どれを選べば損しない？</h2>
+                <p class="text-base md:text-lg text-gray-700">右上（高評価）で円が大きい（レビュー多い）ほど“買って満足”の傾向。気になる点をタップすると該当カードへ移動します。</p>
             </div>
             <details class="max-w-4xl mx-auto bg-white rounded-2xl card-shadow">
                 <summary class="list-none cursor-pointer p-4 sm:p-5 md:p-6 flex items-center justify-between">
@@ -248,18 +343,18 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div id="guide-popular" role="button" tabindex="0" aria-label="人気重視で並べ替える" class="bg-white p-6 rounded-xl card-shadow cursor-pointer hover:shadow-lg focus:outline-none focus:ring-2 ring-primary">
                         <h3 class="font-bold text-primary mb-3">👑 人気重視派</h3>
-                        <p class="text-sm text-gray-600 mb-2"><strong>誰に最適？</strong><br>失敗したくない慎重派ママ</p>
-                        <p class="text-sm text-gray-600">多くの人に選ばれている安心感を重視。レビュー数の多い「間違いない」商品を選びたい方におすすめ。</p>
+                        <p class="text-sm text-gray-600 mb-2"><strong>おすすめ</strong><br>まずは“外さない”定番から選びたい方</p>
+                        <p class="text-sm text-gray-600">多くの人に選ばれた安心感を重視。レビューが多い＝買った人が多い“失敗しにくい”選び方です。</p>
                     </div>
                     <div id="guide-cost" role="button" tabindex="0" aria-label="コスパ重視で並べ替える" class="bg-white p-6 rounded-xl card-shadow cursor-pointer hover:shadow-lg focus:outline-none focus:ring-2 ring-primary">
                         <h3 class="font-bold text-primary mb-3">💰 コスパ重視派</h3>
-                        <p class="text-sm text-gray-600 mb-2"><strong>誰に最適？</strong><br>家計を気にする節約ママ</p>
-                        <p class="text-sm text-gray-600">限られた予算で最大の満足を。安くても機能性は妥協しない、賢いショッピングをしたい方に。</p>
+                        <p class="text-sm text-gray-600 mb-2"><strong>おすすめ</strong><br>できるだけ安く、でも機能は外したくない方</p>
+                        <p class="text-sm text-gray-600">予算内で満足度を最大化。価格は抑えつつ、冷感やUVなどの“必要な機能”はしっかり確保します。</p>
                     </div>
                     <div id="guide-quality" role="button" tabindex="0" aria-label="品質重視で並べ替える" class="bg-white p-6 rounded-xl card-shadow cursor-pointer hover:shadow-lg focus:outline-none focus:ring-2 ring-primary">
                         <h3 class="font-bold text-primary mb-3">⭐ 品質重視派</h3>
-                        <p class="text-sm text-gray-600 mb-2"><strong>誰に最適？</strong><br>長く使える良いものが欲しいママ</p>
-                        <p class="text-sm text-gray-600">評価の高さを最優先。多少高くても満足度の高い、本当に良い商品を選びたい方におすすめ。</p>
+                        <p class="text-sm text-gray-600 mb-2"><strong>おすすめ</strong><br>長く使える“いいもの”を1枚ほしい方</p>
+                        <p class="text-sm text-gray-600">評価の高さを最優先。多少価格が上がっても、着心地と耐久性で元が取れるアイテムを狙います。</p>
                     </div>
                 </div>
                 <p class="text-center text-xs text-muted mt-3">ヒント：各カードをタップすると一覧に反映されます</p>
@@ -269,18 +364,18 @@
         <!-- ユーザーの声（エモーショナル要素） -->
         <section id="testimonials" class="mb-10 md:mb-16">
             <div class="max-w-4xl mx-auto">
-                <h2 class="text-2xl md:text-3xl font-bold text-center mb-6">リアルな声</h2>
+                <h2 class="text-2xl md:text-3xl font-bold text-center mb-6">先輩ママのリアルな声</h2>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <blockquote class="testimonial bg-white p-5 rounded-xl card-shadow text-sm leading-relaxed cursor-pointer" data-query="UV 体型カバー">
-                        <p class="mb-2">「保育園の送迎や公園でも使える！日差し対策と体型カバーが同時に叶いました。」</p>
+                        <p class="mb-2">「保育園の送迎や公園でも使える。日差し対策と体型カバーが同時に叶いました。」</p>
                         <footer class="text-xs text-muted">30代・2児のママ</footer>
                     </blockquote>
                     <blockquote class="testimonial bg-white p-5 rounded-xl card-shadow text-sm leading-relaxed cursor-pointer" data-query="ルームウェア 洗濯 安い">
-                        <p class="mb-2">「1,000円台でこのクオリティは神。洗濯に強くて毎日ヘビロテしています。」</p>
+                        <p class="mb-2">「1,000円台でこのクオリティは十分。洗濯に強くて毎日ヘビロテしています。」</p>
                         <footer class="text-xs text-muted">40代・小学生ママ</footer>
                     </blockquote>
                     <blockquote class="testimonial bg-white p-5 rounded-xl card-shadow text-sm leading-relaxed cursor-pointer" data-query="サイズ 伸縮 パンツ">
-                        <p class="mb-2">「サイズ展開が豊富で安心。レビュー通りの着心地で買って正解でした。」</p>
+                        <p class="mb-2">「サイズ展開が豊富で安心。レビュー通りの着心地で、買ってよかったです。」</p>
                         <footer class="text-xs text-muted">20代・ワーママ</footer>
                     </blockquote>
                 </div>
@@ -292,7 +387,7 @@
             <div class="max-w-3xl mx-auto text-center mb-8">
                 <h2 class="text-2xl md:text-3xl font-bold mb-4">あなたの価値観で選ぶ：商品一覧</h2>
                 <p class="text-lg md:text-xl leading-relaxed mb-8 text-gray-700">
-                    上記の選び方を参考に、あなたの考えに近いボタンを選んでください。商品一覧の並び順が変わります。
+                    目的に合わせて並び替えできます。<br class="hidden md:block">「迷ったら人気順」「安く賢くは価格順」「長く使うなら評価順」。
                 </p>
                 <div class="flex flex-col sm:flex-row justify-center gap-4" role="tablist" aria-label="並び替え">
                     <button id="btn-sort-rank" role="tab" aria-selected="true" class="w-full sm:w-auto bg-primary text-white font-bold py-3 px-8 rounded-full transition-all transform-gpu hover:scale-105 card-shadow-hover ring-2 ring-offset-2 ring-primary">
@@ -384,28 +479,72 @@
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                     <div class="bg-green-50 p-4 rounded-lg">
-                        <h4 class="font-bold text-green-800 mb-2">メリット（長所）</h4>
+                        <h4 class="font-bold text-green-800 mb-2">メリット（いいところ）</h4>
                         <ul class="text-sm space-y-1 text-green-700">
-                            <li>• 機能性とデザインを両立</li>
-                            <li>• 1,000～2,000円台の驚異のコスパ</li>
-                            <li>• 子育て世代のリアルなニーズに対応</li>
-                            <li>• 長く使える耐久性と品質</li>
+                            <li>• 機能性とデザインを両立（UV・冷感・体型カバー）</li>
+                            <li>• 1,000～2,000円台中心でコスパ良し</li>
+                            <li>• 子育て中の“動きやすさ・洗濯のしやすさ”に合う</li>
+                            <li>• 長く使える耐久性と着心地</li>
                         </ul>
                     </div>
                     <div class="bg-orange-50 p-4 rounded-lg">
-                        <h4 class="font-bold text-orange-800 mb-2">注意点（短所）</h4>
+                        <h4 class="font-bold text-orange-800 mb-2">注意点（気をつけたいこと）</h4>
                         <ul class="text-sm space-y-1 text-orange-700">
-                            <li>• サイズ選びは慎重に（オンラインのリスク）</li>
-                            <li>• 価格・在庫は常に変動</li>
-                            <li>• 人気商品は完売の可能性</li>
-                            <li>• セール期間中は特に価格変動が大</li>
+                            <li>• サイズはレビューの「大きめ/小さめ」を要確認</li>
+                            <li>• 価格・在庫は変動。購入前にリンク先で最新をチェック</li>
+                            <li>• 人気色は早めに完売しがち</li>
+                            <li>• セール時は価格が上下しやすい</li>
                         </ul>
                     </div>
                 </div>
                 
-                <p class="text-center text-gray-600">あなたの価値観に合う一着が、このTOP10の中に必ずあります。<br>忙しい毎日を、もっと快適で美しく変える夏のパートナーを見つけてください。</p>
+                <p class="text-center text-gray-600">あなたの価値観に合う一着が、このTOP10の中にきっとあります。<br>忙しい毎日を“ラクしてきれい見え”に変えるパートナーを見つけましょう。</p>
              </div>
         </section>
+
+        <!-- シェアバー（ボトム） -->
+        <section id="share-bottom" class="max-w-4xl mx-auto mt-10 md:mt-14" aria-label="この記事を共有（記事末尾）">
+            <div class="bg-white dark:bg-opacity-80 backdrop-blur-sm p-3 sm:p-4 rounded-2xl card-shadow">
+                <div class="share-bar" role="group" aria-label="共有ボタン">
+                    <button type="button" class="btn share-chip text-sm" data-share-action="native" aria-label="OSの共有シートを開く">
+                        <span class="icon-bg" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3v10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M8 7l4-4 4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="4" y="11" width="16" height="9" rx="2" stroke="currentColor" stroke-width="2"/></svg>
+                        </span>
+                        OSで共有
+                    </button>
+                    <button type="button" class="btn share-chip text-sm" data-share-action="x" aria-label="Xでシェア">
+                        <span class="icon-bg" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M4 4h4l4 6 4-6h4l-6.5 9L20 20h-4l-4-6-4 6H4l6.5-9L4 4z"/></svg>
+                        </span>
+                        Xでシェア
+                    </button>
+                    <button type="button" class="btn share-chip text-sm" data-share-action="line" aria-label="LINEで送る">
+                        <span class="icon-bg" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M20 11c0 4.418-4.03 8-9 8-1.036 0-2.03-.145-2.95-.412L4 20l1.59-3.18C4.62 15.53 4 13.83 4 12c0-4.418 4.03-8 9-8s7 3.582 7 7z"/><path fill="#fff" d="M9 9h2v6H9zM12.5 9H15c1.2 0 2 .8 2 2s-.8 2-2 2h-1v2h-1.5V9zm1.5 1.5V12h1c.4 0 .5-.3.5-.5s-.1-.5-.5-.5h-1z"/></svg>
+                        </span>
+                        LINEで送る
+                    </button>
+                    <button type="button" class="btn share-chip text-sm" data-share-action="copy" aria-label="リンクをコピー">
+                        <span class="icon-bg" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 17a4 4 0 0 1 0-6l4-4a4 4 0 1 1 6 6l-1 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 7a4 4 0 0 1 0 6l-4 4a4 4 0 1 1-6-6l1-1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </span>
+                        リンクをコピー
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- フローティング共有（スマホ） -->
+        <div class="floating-left" id="share-fab-wrap" style="display:none;">
+            <div id="share-fab-menu" class="hidden bg-white dark:bg-opacity-90 backdrop-blur-sm border rounded-2xl card-shadow p-2 flex flex-col gap-2" style="min-width: 220px; margin-bottom: 10px;">
+                <button type="button" class="btn share-chip text-sm" data-share-action="x"><span class="icon-bg"><svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M4 4h4l4 6 4-6h4l-6.5 9L20 20h-4l-4-6-4 6H4l6.5-9L4 4z"/></svg></span>Xでシェア</button>
+                <button type="button" class="btn share-chip text-sm" data-share-action="line"><span class="icon-bg"><svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M20 11c0 4.418-4.03 8-9 8-1.036 0-2.03-.145-2.95-.412L4 20l1.59-3.18C4.62 15.53 4 13.83 4 12c0-4.418 4.03-8 9-8s7 3.582 7 7z"/><path fill="#fff" d="M9 9h2v6H9zM12.5 9H15c1.2 0 2 .8 2 2s-.8 2-2 2h-1v2h-1.5V9zm1.5 1.5V12h1c.4 0 .5-.3.5-.5s-.1-.5-.5-.5h-1z"/></svg></span>LINEで送る</button>
+                <button type="button" class="btn share-chip text-sm" data-share-action="copy"><span class="icon-bg"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 17a4 4 0 0 1 0-6l4-4a4 4 0 1 1 6 6l-1 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 7a4 4 0 0 1 0 6l-4 4a4 4 0 1 1-6-6l1-1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>リンクをコピー</button>
+            </div>
+            <button id="btn-share-fab" class="fab btn bg-primary text-white rounded-full card-shadow-hover" style="width:56px;height:56px;display:flex;align-items:center;justify-content:center;">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="26" height="26"><path d="M12 5v10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M8 9l4-4 4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="4" y="13" width="16" height="7" rx="2" stroke="currentColor" stroke-width="2"/></svg>
+            </button>
+        </div>
 
         <!-- 比較バー（sticky） -->
         <div id="compare-bar" class="sticky-bar max-w-4xl mx-auto mt-6 hidden">
@@ -510,6 +649,19 @@
         `;
         document.body.appendChild(modalBackdrop);
 
+        // ------- ルーティング（共通設定）
+        (function loadRoutes(){
+            try {
+                // 既に読み込み済みならスキップ
+                if (!window.AppRoutes) {
+                    var s = document.createElement('script');
+                    s.src = '../../routes.js';
+                    s.defer = false; // 先に読み込み
+                    document.head.appendChild(s);
+                }
+            } catch {}
+        })();
+
         // ------- ユーティリティ
         const debounce = (fn, ms = 250) => {
             let t; return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); };
@@ -598,7 +750,22 @@
             const sizes = [320, 480, 640, 800, 1200];
             return sizes.map(s => `${imgUrlWithSize(url, s)} ${s}w`).join(', ');
         }
+        function getProductDetailUrl(product){
+            try {
+                if (!window.AppRoutes) return '';
+                const byName = (AppRoutes.productByName && AppRoutes.productByName[product.itemName]) || '';
+                const slug = AppRoutes.slugify ? AppRoutes.slugify(product.itemName) : '';
+                const bySlug = (slug && AppRoutes.products && AppRoutes.products[slug]) || '';
+                const url = byName || bySlug;
+                if (!url) return '';
+                const from = encodeURIComponent(`${location.origin}${location.pathname}#card-${product.rank}`);
+                return `${url}?from=${from}`;
+            } catch { return ''; }
+        }
+
         function createCard(product) {
+            const detailUrl = getProductDetailUrl(product);
+            const detailLinkHtml = detailUrl ? `<a href="${detailUrl}" class="btn border rounded-lg px-3 py-2 text-sm" style="min-width:44px;min-height:44px;" aria-label="${product.itemName} の解説ページへ">解説</a>` : '';
             return `
                 <div id="card-${product.rank}" class="bg-white rounded-2xl card-shadow card-shadow-hover transition-all transform-gpu opacity-0 translate-y-4" style="transition-delay: ${product.rank * 40}ms;">
                     <img src="${imgUrlWithSize(product.imageUrl, 640)}" srcset="${buildSrcset(product.imageUrl)}" sizes="(min-width:1024px) 320px, (min-width:768px) 45vw, 90vw" alt="${product.itemName}" width="640" height="640" class="rounded-t-2xl w-full object-contain bg-white" style="aspect-ratio: 1 / 1;" loading="lazy" decoding="async">
@@ -635,6 +802,7 @@
                                 比較
                             </label>
                             <button class="btn border rounded-lg px-3 py-2 text-sm share-btn" style="min-width:44px;min-height:44px;" data-rank="${product.rank}" data-name="${product.itemName}" aria-label="${product.itemName} を共有">共有</button>
+                            ${detailLinkHtml}
                             <a href="${product.affiliateUrl}" target="_blank" rel="sponsored nofollow noopener noreferrer" class="block w-full text-center btn-cta font-bold py-3 px-4 rounded-lg hover:opacity-95 hover:brightness-110 transition" aria-label="楽天で価格と在庫を確認">
                                 楽天で価格・在庫を確認
                             </a>
@@ -1205,12 +1373,139 @@
                 }, 200);
             }
         })();
+
+        // ------- シェアバー（X/LINE/コピー/OS共有）
+        function getPageShareData() {
+            const pageTitle = (document.title || '').trim();
+            const heading = (document.querySelector('h1')?.textContent || '').trim();
+            const text = heading && heading !== pageTitle ? heading : pageTitle;
+            const url = `${location.origin}${location.pathname}${location.search}`; // ハッシュ除外
+            return { title: pageTitle || 'おすすめまとめ', text: text || pageTitle, url };
+        }
+        function openCenteredPopup(url) {
+            try {
+                const width = 600, height = 680;
+                const dualScreenLeft = window.screenLeft !== undefined ? window.screenLeft : window.screenX;
+                const dualScreenTop = window.screenTop !== undefined ? window.screenTop : window.screenY;
+                const screenWidth = window.innerWidth || document.documentElement.clientWidth || screen.width;
+                const screenHeight = window.innerHeight || document.documentElement.clientHeight || screen.height;
+                const left = dualScreenLeft + (screenWidth - width) / 2;
+                const top = dualScreenTop + (screenHeight - height) / 2;
+                window.open(url, '_blank', `noopener,noreferrer,width=${width},height=${height},top=${top},left=${left}`);
+            } catch { window.open(url, '_blank'); }
+        }
+        async function handleShareAction(action, btn) {
+            const { title, text, url } = getPageShareData();
+            if (action === 'native') {
+                try { if (navigator.share) { await navigator.share({ title, text, url }); return; } } catch {}
+                return handleShareAction('copy', btn);
+            }
+            if (action === 'x') {
+                const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
+                openCenteredPopup(shareUrl);
+                return;
+            }
+            if (action === 'line') {
+                const shareUrl = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(url)}`;
+                openCenteredPopup(shareUrl);
+                return;
+            }
+            if (action === 'copy') {
+                try {
+                    await navigator.clipboard.writeText(url);
+                    const original = btn.textContent;
+                    btn.textContent = 'コピー済み';
+                    setTimeout(() => { btn.textContent = original; }, 1500);
+                } catch {}
+                return;
+            }
+        }
+        (function initShareBars(){
+            const buttons = document.querySelectorAll('[data-share-action]');
+            buttons.forEach(b => {
+                b.addEventListener('click', () => handleShareAction(b.dataset.shareAction, b));
+            });
+            if (!navigator.share) {
+                document.querySelectorAll('[data-share-action="native"]').forEach(el => el.classList.add('hidden'));
+            }
+            // FAB（スマホのみ表示）
+            const fabWrap = document.getElementById('share-fab-wrap');
+            const fabBtn = document.getElementById('btn-share-fab');
+            const fabMenu = document.getElementById('share-fab-menu');
+            const mq = window.matchMedia('(max-width: 767px)');
+            const updateFabVisibility = () => { fabWrap.style.display = mq.matches ? 'block' : 'none'; };
+            updateFabVisibility();
+            mq.addEventListener?.('change', updateFabVisibility);
+            let menuOpen = false;
+            if (fabBtn) {
+                fabBtn.addEventListener('click', () => {
+                    menuOpen = !menuOpen;
+                    fabMenu.classList.toggle('hidden', !menuOpen);
+                });
+            }
+            // スクロール時に上部で非表示、下部で表示
+            let lastY = 0;
+            window.addEventListener('scroll', () => {
+                const y = window.scrollY || 0;
+                if (y < 200) { fabWrap.style.opacity = '0'; fabWrap.style.pointerEvents = 'none'; }
+                else { fabWrap.style.opacity = '1'; fabWrap.style.pointerEvents = 'auto'; }
+                lastY = y;
+            }, { passive: true });
+            // クリック外しでメニューを閉じる
+            document.addEventListener('click', (e) => {
+                if (!fabWrap.contains(e.target) && menuOpen) { menuOpen = false; fabMenu.classList.add('hidden'); }
+            });
+        })();
     </script>
     
     <!-- 読み込み完了後にbodyを表示するためのスクリプト -->
     <script>
         window.onload = function() {
             document.body.style.display = "block";
+            // ヘッダー有効化
+            document.body.classList.add('has-header');
+            (function headerAutoHide(){
+                const header = document.getElementById('site-header');
+                if (!header) return;
+                let lastY = window.scrollY || 0;
+                let ticking = false;
+                window.addEventListener('scroll', () => {
+                    const y = window.scrollY || 0;
+                    if (!ticking) {
+                        window.requestAnimationFrame(() => {
+                            if (y > lastY && y > 80) header.classList.add('hide');
+                            else header.classList.remove('hide');
+                            lastY = y;
+                            ticking = false;
+                        });
+                        ticking = true;
+                    }
+                }, { passive: true });
+            })();
+
+            // 右サイドTOC ScrollSpy
+            (function rightTocSpy(){
+                const toc = document.getElementById('right-toc');
+                if (!toc) return;
+                const links = Array.from(toc.querySelectorAll('a[href^="#"]'));
+                const ids = links.map(a => a.getAttribute('href').slice(1));
+                const update = () => {
+                    let activeIndex = -1;
+                    let minTop = Infinity;
+                    ids.forEach((id, i) => {
+                        const el = document.getElementById(id);
+                        if (!el) return;
+                        const rect = el.getBoundingClientRect();
+                        // ビューポート上部からの距離が最小かつ-120px以上を現在地とする
+                        if (rect.top >= -120 && rect.top < minTop) { minTop = rect.top; activeIndex = i; }
+                    });
+                    links.forEach((a, i) => a.classList.toggle('active', i === activeIndex));
+                };
+                window.addEventListener('scroll', update, { passive: true });
+                window.addEventListener('resize', update);
+                update();
+            })();
+
             const toTop = document.getElementById('btn-back-to-top');
             if (toTop) {
                 toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
