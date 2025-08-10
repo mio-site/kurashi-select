@@ -48,11 +48,11 @@ jobs:
             git push
           fi
 
-      - name: Notify (optional)
-        if: ${{ secrets.SLACK_WEBHOOK_URL != '' }}
-        run: |
-          curl -X POST -H 'Content-type: application/json' \
-            --data "{\"text\":\"weekly-details-diff: ${{ job.status }}\"}" \
-            ${{ secrets.SLACK_WEBHOOK_URL }}
+      # - name: Notify (optional)
+      #   if: ${{ secrets.SLACK_WEBHOOK_URL != '' }}
+      #   run: |
+      #     curl -X POST -H 'Content-type: application/json' \
+      #       --data "{\"text\":\"weekly-details-diff: ${{ job.status }}\"}" \
+      #       ${{ secrets.SLACK_WEBHOOK_URL }}
 
 
