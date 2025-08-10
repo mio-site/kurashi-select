@@ -72,8 +72,10 @@
         .chip-selected { outline: 2px solid var(--primary); background-color: rgba(37, 99, 235, 0.08); }
         .sticky-bar { position: sticky; bottom: 12px; z-index: 40; }
         .floating { position: fixed; right: 16px; bottom: 16px; z-index: 50; }
-        .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.35); display: none; align-items: center; justify-content: center; z-index: 50; }
-        .modal { max-width: 960px; width: calc(100% - 2rem); background: var(--card); color: var(--text); border-radius: 16px; box-shadow: 0 25px 50px rgba(0,0,0,0.2); }
+        .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.35); display: none; align-items: center; justify-content: center; z-index: 1000; }
+        .modal { position: relative; max-width: 960px; width: calc(100% - 2rem); background: var(--card); color: var(--text); border-radius: 16px; box-shadow: 0 25px 50px rgba(0,0,0,0.2); max-height: 92vh; overflow: auto; -webkit-overflow-scrolling: touch; }
+        .modal-header { position: sticky; top: 0; background: var(--card); z-index: 5; border-bottom: 1px solid rgba(0,0,0,0.06); }
+        body.modal-open { overflow: hidden; }
         .range { accent-color: var(--primary); }
         .btn { cursor: pointer; }
         .highlight-ring { box-shadow: 0 0 0 4px rgba(37,99,235,0.35) inset; transition: box-shadow .3s ease; }
@@ -129,6 +131,9 @@
         #faq details[open] { background: rgba(37,99,235,0.04); }
         #faq summary { font-size: 1.05rem; }
 
+        /* ラベル色の統一（バッジ） */
+        .badge-primary { background-color: rgba(37,99,235,0.10); color: var(--primary); }
+
         /* SNS共有バー */
         .share-bar { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
         .share-chip { display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; border: 1px solid #E5E7EB; border-radius: 9999px; background: #fff; color: #374151; }
@@ -143,6 +148,9 @@
 
         /* フローティング共有ボタン（スマホ） */
         .floating-left { position: fixed; left: 16px; bottom: 16px; z-index: 50; }
+        
+        /* Busy軽減: シェアUIの集約（上部/FABを非表示） */
+        #share-top, #share-fab-wrap { display: none !important; }
         
         /* --- 追加: 極小グローバルヘッダー --- */
         .site-header { position: fixed; inset-inline: 0; top: 0; z-index: 60; backdrop-filter: saturate(180%) blur(12px); transition: transform .25s ease, background-color .2s ease; }
@@ -172,6 +180,12 @@
         .toc-toggle:hover{ filter: brightness(1.05); }
         .dark .toc-toggle{ background: rgba(147,197,253,0.85); color: #0b1220; border-color: rgba(148,163,184,0.35); }
         @media (min-width: 1280px){ .toc-toggle{ display: inline-flex; right: auto; left: min(calc(100vw - 16px - 42px), calc(50% + 600px + 16px)); } }
+
+        /* 価格帯（モバイルではみ出し防止） */
+        @media (max-width: 639px){
+            #controls .flex.items-center.gap-2{ flex-wrap: wrap; }
+            #price-range{ flex: 0 0 100%; width: 100%; min-width: 0; box-sizing: border-box; margin-top: 6px; }
+        }
     </style>
 </head>
 <body id="top" class="antialiased" style="display: none;">
@@ -211,8 +225,8 @@
             </div>
         </header>
         
-        <!-- シェアバー（トップ） -->
-        <section id="share-top" class="max-w-4xl mx-auto mb-8 md:mb-12" aria-label="この記事を共有">
+        <!-- シェアバー（トップ）-- 非表示（Busy軽減のため下部のみ残す） -->
+        <section id="share-top" class="max-w-4xl mx-auto mb-8 md:mb-12" aria-label="この記事を共有" hidden>
             <div class="bg-white dark:bg-opacity-80 backdrop-blur-sm p-3 sm:p-4 rounded-2xl card-shadow">
                 <div class="share-bar" role="group" aria-label="共有ボタン">
                     <button type="button" class="btn share-chip text-sm" data-share-action="native" aria-label="OSの共有シートを開く">
@@ -277,15 +291,9 @@
 
         <!-- 総合トップ3（ファーストビュー強化） -->
         <section id="top3" class="mb-10 md:mb-14">
-            <div class="max-w-4xl mx-auto text-center mb-4">
+            <div class="max-w-4xl mx-auto text-center mb-6">
                 <h2 class="text-2xl md:text-3xl font-bold mb-2">ママが選ぶ！総合トップ3</h2>
-                <p class="text-sm md:text-base text-gray-700">まずここを見ればOK。機能性・体型カバー・コスパの“総合点が高い”3品です。</p>
-                <div class="text-sm md:text-base text-gray-700 mt-2 flex flex-wrap items-center justify-center gap-2">
-                    <span class="chip">品質(評価) 33%</span>
-                    <span class="chip">コスパ(価格) 34%</span>
-                    <span class="chip">人気(レビュー) 33%</span>
-                    <span class="text-muted">独自スコアで算出</span>
-                </div>
+                <p class="text-sm md:text-base text-gray-700">“失敗しにくい”おすすめ3品。詳しくは下の一覧でチェック。</p>
             </div>
             <div id="top3-container" class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8"></div>
         </section>
@@ -391,27 +399,7 @@
             </div>
         </section>
 
-        <!-- ユーザーの声（エモーショナル要素） -->
-        <section id="testimonials" class="mb-10 md:mb-16">
-            <div class="max-w-4xl mx-auto">
-                <h2 class="text-2xl md:text-3xl font-bold text-center mb-6">先輩ママのリアルな声</h2>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <blockquote class="testimonial bg-white p-5 rounded-xl card-shadow text-sm leading-relaxed cursor-pointer" data-query="UV 体型カバー">
-                        <p class="mb-2">「保育園の送迎や公園でも使える。日差し対策と体型カバーが同時に叶いました。」</p>
-                        <footer class="text-xs text-muted">30代・2児のママ</footer>
-                    </blockquote>
-                    <blockquote class="testimonial bg-white p-5 rounded-xl card-shadow text-sm leading-relaxed cursor-pointer" data-query="ルームウェア 洗濯 安い">
-                        <p class="mb-2">「1,000円台でこのクオリティは十分。洗濯に強くて毎日ヘビロテしています。」</p>
-                        <footer class="text-xs text-muted">40代・小学生ママ</footer>
-                    </blockquote>
-                    <blockquote class="testimonial bg-white p-5 rounded-xl card-shadow text-sm leading-relaxed cursor-pointer" data-query="サイズ 伸縮 パンツ">
-                        <p class="mb-2">「サイズ展開が豊富で安心。レビュー通りの着心地で、買ってよかったです。」</p>
-                        <footer class="text-xs text-muted">20代・ワーママ</footer>
-                    </blockquote>
-                </div>
-                <p class="text-center text-xs text-muted mt-3">ヒント：タップで関連条件の一覧にジャンプします</p>
-            </div>
-        </section>
+        
         
         <section id="interactive-selection" class="mb-16 md:mb-24">
             <div class="max-w-3xl mx-auto text-center mb-8">
@@ -432,7 +420,7 @@
                 </div>
             </div>
 
-            <div id="results-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            <div id="results-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
                 <!-- 商品カードがここに動的に挿入されます -->
             </div>
         </section>
@@ -532,6 +520,28 @@
              </div>
         </section>
 
+        <!-- ユーザーの声（ページ末尾へ移動して集約） -->
+        <section id="testimonials" class="max-w-4xl mx-auto mt-10 md:mt-14 mb-16 md:mb-20">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-2xl md:text-3xl font-bold text-center mb-6">先輩ママのリアルな声</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <blockquote class="testimonial bg-white p-5 rounded-xl card-shadow text-sm leading-relaxed cursor-pointer" data-query="UV 体型カバー" data-tags="UVカット 体型カバー">
+                        <p class="mb-2">「保育園の送迎や公園でも使える。日差し対策と体型カバーが同時に叶いました。」</p>
+                        <footer class="text-xs text-muted">30代・2児のママ</footer>
+                    </blockquote>
+                    <blockquote class="testimonial bg-white p-5 rounded-xl card-shadow text-sm leading-relaxed cursor-pointer" data-query="ルームウェア 洗濯 安い" data-tags="ルームウェア">
+                        <p class="mb-2">「1,000円台でこのクオリティは十分。洗濯に強くて毎日ヘビロテしています。」</p>
+                        <footer class="text-xs text-muted">40代・小学生ママ</footer>
+                    </blockquote>
+                    <blockquote class="testimonial bg-white p-5 rounded-xl card-shadow text-sm leading-relaxed cursor-pointer" data-query="サイズ 伸縮 パンツ" data-tags="パンツ デニム">
+                        <p class="mb-2">「サイズ展開が豊富で安心。レビュー通りの着心地で、買ってよかったです。」</p>
+                        <footer class="text-xs text-muted">20代・ワーママ</footer>
+                    </blockquote>
+                </div>
+                <p class="text-center text-xs text-muted mt-3">ヒント：タップで関連条件の一覧にジャンプします</p>
+            </div>
+        </section>
+
         <!-- シェアバー（ボトム） -->
         <section id="share-bottom" class="max-w-4xl mx-auto mt-10 md:mt-14" aria-label="この記事を共有（記事末尾）">
             <div class="bg-white dark:bg-opacity-80 backdrop-blur-sm p-3 sm:p-4 rounded-2xl card-shadow">
@@ -564,8 +574,8 @@
             </div>
         </section>
 
-        <!-- フローティング共有（スマホ） -->
-        <div class="floating-left" id="share-fab-wrap" style="display:none;">
+        <!-- フローティング共有（スマホ）-- 非表示 -->
+        <div class="floating-left" id="share-fab-wrap" style="display:none;" hidden>
             <div id="share-fab-menu" class="hidden bg-white dark:bg-opacity-90 backdrop-blur-sm border rounded-2xl card-shadow p-2 flex flex-col gap-2" style="min-width: 220px; margin-bottom: 10px;">
                 <button type="button" class="btn share-chip text-sm" data-share-action="x"><span class="icon-bg"><svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M4 4h4l4 6 4-6h4l-6.5 9L20 20h-4l-4-6-4 6H4l6.5-9L4 4z"/></svg></span>Xでシェア</button>
                 <button type="button" class="btn share-chip text-sm" data-share-action="line"><span class="icon-bg"><svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M20 11c0 4.418-4.03 8-9 8-1.036 0-2.03-.145-2.95-.412L4 20l1.59-3.18C4.62 15.53 4 13.83 4 12c0-4.418 4.03-8 9-8s7 3.582 7 7z"/><path fill="#fff" d="M9 9h2v6H9zM12.5 9H15c1.2 0 2 .8 2 2s-.8 2-2 2h-1v2h-1.5V9zm1.5 1.5V12h1c.4 0 .5-.3.5-.5s-.1-.5-.5-.5h-1z"/></svg></span>LINEで送る</button>
@@ -669,12 +679,14 @@
         const modalBackdrop = document.createElement('div');
         modalBackdrop.className = 'modal-backdrop';
         modalBackdrop.innerHTML = `
-            <div class="modal p-4 md:p-6">
-                <div class="flex justify-between items-center mb-4">
+            <div class="modal p-4 md:p-6" role="dialog" aria-modal="true" aria-label="商品比較">
+                <div class="modal-header flex justify-between items-center p-2 md:p-0">
                     <h3 class="text-lg font-bold">商品比較</h3>
                     <button id="modal-close" class="btn border px-3 py-1 rounded-lg">閉じる</button>
                 </div>
-                <div id="compare-body" class="overflow-x-auto"></div>
+                <div class="pt-4">
+                    <div id="compare-body" class="overflow-x-auto"></div>
+                </div>
             </div>
         `;
         document.body.appendChild(modalBackdrop);
@@ -811,14 +823,14 @@
                             </div>
                         </div>
                         <div class="text-base space-y-2 mb-4">
-                            <p class="text-gray-700">${product.catchcopy}</p>
+                            <p class="text-gray-700 line-clamp-2">${product.catchcopy}</p>
                             <div class="flex items-center gap-4 text-sm">
-                                <span class="bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded-full">⭐ ${product.reviewAverage}</span>
+                                <span class="badge-primary px-2 py-0.5 rounded-full">⭐ ${product.reviewAverage}</span>
                                 <span class="text-gray-500">✍️ ${product.reviewCount.toLocaleString()}件</span>
                             </div>
                         </div>
                         <div class="flex flex-wrap gap-2 mb-3">
-                            ${product.tags.map(t => `<span class="chip">${t}</span>`).join('')}
+                            ${(product.tags || []).slice(0,3).map(t => `<span class="chip">${t}</span>`).join('')}
                         </div>
                          <div id="details-${product.rank}" class="text-base leading-relaxed text-gray-700 bg-stone-50 p-3 rounded-lg hidden mb-4">
                             <p>${product.description}</p>
@@ -826,7 +838,7 @@
                         <button onclick="toggleDetails(${product.rank})" class="w-full text-center bg-primary text-white font-bold py-3 rounded-lg hover:brightness-95 transition-colors" aria-label="${product.itemName} の詳細を表示">詳細を見る</button>
                         <div class="actions-row mt-3">
                             <label class="btn-chip"><input type="checkbox" class="compare-checkbox" data-id="${product.itemName}" aria-label="${product.itemName} を比較に追加"><span>比較</span></label>
-                            <button class="btn-chip share-btn" data-rank="${product.rank}" data-name="${product.itemName}" aria-label="${product.itemName} を共有">共有</button>
+                        
                             ${detailLinkHtml}
                             <a href="${product.affiliateUrl}" target="_blank" rel="sponsored nofollow noopener noreferrer" class="flex-1 block text-center btn-cta font-bold py-3 px-4 rounded-lg hover:opacity-95 hover:brightness-110 transition" aria-label="楽天で価格と在庫を確認">楽天で価格・在庫を確認</a>
                             <span class="text-[11px] text-muted self-center">PR｜広告</span>
@@ -1033,6 +1045,7 @@
             `;
             document.getElementById('compare-body').innerHTML = html;
             modalBackdrop.style.display = 'flex';
+            document.body.classList.add('modal-open');
         }
 
         function refreshChart(list) {
@@ -1127,11 +1140,35 @@
             guideQuality.addEventListener('keypress', (e)=>{ if(e.key==='Enter'||e.key===' ') applyQuality(); });
         }
 
-        // テスティモニアル: クリックで検索に反映
+        // テスティモニアル: クリックでタグ/検索を反映（タグ優先）
         document.querySelectorAll('.testimonial').forEach(el => {
-            const q = el.getAttribute('data-query');
-            el.addEventListener('click', ()=>{ if(!q) return; state.query = q; searchBox.value = q; displayResults(state.sortKey); document.getElementById('interactive-selection')?.scrollIntoView({behavior:'smooth'}); });
-            el.addEventListener('keypress', (e)=>{ if((e.key==='Enter'||e.key===' ') && q){ state.query = q; searchBox.value = q; displayResults(state.sortKey); document.getElementById('interactive-selection')?.scrollIntoView({behavior:'smooth'}); }});
+            const applyFromTestimonial = () => {
+                const tagsAttr = (el.getAttribute('data-tags') || '').trim();
+                if (tagsAttr) {
+                    const tags = tagsAttr.split(/[\s,]+/).filter(Boolean);
+                    state.selectedTags = new Set(tags);
+                    state.query = '';
+                    searchBox.value = '';
+                    // チップのUI反映
+                    Array.from(tagsContainer.children).forEach(ch => {
+                        const selected = tags.includes(ch.textContent);
+                        ch.classList.toggle('chip-selected', selected);
+                        ch.setAttribute('aria-pressed', selected ? 'true' : 'false');
+                    });
+                    displayResults(state.sortKey);
+                } else {
+                    const q = el.getAttribute('data-query');
+                    if (!q) return;
+                    state.selectedTags.clear();
+                    Array.from(tagsContainer.children).forEach(ch => { ch.classList.remove('chip-selected'); ch.setAttribute('aria-pressed','false'); });
+                    state.query = q;
+                    searchBox.value = q;
+                    displayResults(state.sortKey);
+                }
+                document.getElementById('interactive-selection')?.scrollIntoView({behavior:'smooth'});
+            };
+            el.addEventListener('click', applyFromTestimonial);
+            el.addEventListener('keypress', (e) => { if (e.key === 'Enter' || e.key === ' ') applyFromTestimonial(); });
         });
 
         const syncPriceQuick = () => {
@@ -1152,8 +1189,9 @@
         favOnlyCheckbox.addEventListener('change', (e) => { state.onlyFavorites = e.target.checked; displayResults(state.sortKey); });
         btnCompare.addEventListener('click', openCompareModal);
         btnCompareClear.addEventListener('click', () => { compareSet.clear(); updateCompareBar(); document.querySelectorAll('.compare-checkbox').forEach(x=>x.checked=false); });
-        modalBackdrop.addEventListener('click', (e) => { if (e.target === modalBackdrop) modalBackdrop.style.display = 'none'; });
-        modalBackdrop.querySelector('#modal-close').addEventListener('click', () => modalBackdrop.style.display = 'none');
+        const closeModal = () => { modalBackdrop.style.display = 'none'; document.body.classList.remove('modal-open'); };
+        modalBackdrop.addEventListener('click', (e) => { if (e.target === modalBackdrop) closeModal(); });
+        modalBackdrop.querySelector('#modal-close').addEventListener('click', closeModal);
         
         // FAQ 全開/全閉
         const btnFaqOpenAll = document.getElementById('btn-faq-open-all');
@@ -1232,10 +1270,9 @@
                         <h3 class="font-bold text-primary leading-tight mb-1">${p.itemName}</h3>
                         <div class="flex items-center justify-between mb-3">
                             <span class="text-lg font-bold text-accent">¥${p.itemPrice.toLocaleString()}</span>
-                            <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded-full" aria-label="平均評価 ${p.reviewAverage}">⭐ ${p.reviewAverage}</span>
+                            <span class="badge-primary px-2 py-0.5 rounded-full" aria-label="平均評価 ${p.reviewAverage}">⭐ ${p.reviewAverage}</span>
                         </div>
-                        <a href="${p.affiliateUrl}" target="_blank" rel="sponsored nofollow noopener noreferrer" class="block w-full text-center btn-cta font-bold py-3 px-4 rounded-lg hover:opacity-95 hover:brightness-110 transition" aria-label="${p.itemName} を楽天で見る（新しいタブで開きます）">楽天で価格・在庫を確認</a>
-                        <span class="block text-center text-[11px] text-muted mt-1">PR｜広告</span>
+                        <a href="#interactive-selection" class="block w-full text-center btn bg-accent text-white font-bold py-3 px-4 rounded-lg hover:opacity-95 transition" aria-label="商品一覧へ移動">商品一覧で詳しく見る</a>
                     </div>
                 </div>
             `).join('');
