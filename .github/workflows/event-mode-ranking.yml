@@ -1,0 +1,55 @@
+name: event-mode-ranking
+
+on:
+  workflow_dispatch:
+    inputs:
+      genres:
+        description: 'genreId CSV（例: 100371,551177。未指定で全トップ）'
+        required: false
+      note:
+        description: 'メモ（セール名など）'
+        required: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: data-update
+  cancel-in-progress: true
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - run: pip install requests
+
+      - name: Collect ranking & build article JSON (event)
+        env:
+          RAKUTEN_APP_ID: ${{ secrets.RAKUTEN_APP_ID }}
+          RAKUTEN_AFFILIATE_ID: ${{ secrets.RAKUTEN_AFFILIATE_ID }}
+        run: |
+          python scripts/event_ranking.py \
+            --interval 3.1 \
+            --genre "レディースファッション" \
+            --top-n 10 \
+            --genres "${{ github.event.inputs.genres }}"
+
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add ranking_*event.jsonl site_data/series001/001-001.json
+          if ! git diff --cached --quiet; then
+            git commit -m "chore(data): event-mode ranking update (${{ github.event.inputs.note }})"
+            git push
+          fi
+
+
