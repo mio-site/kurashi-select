@@ -277,7 +277,7 @@
         </section>
 
         <!-- 関連記事（内部リンク強化） -->
-        <section id="related" class="max-w-4xl mx-auto mt-12 md:mt-16">
+        <section id="related" class="max-w-4xl mx-auto mt-12 md:mt-16 mb-12 md:mb-16">
             <div class="bg-white dark:bg-opacity-80 backdrop-blur-sm p-5 md:p-6 rounded-2xl card-shadow">
                 <h2 class="text-xl md:text-2xl font-bold mb-3">関連記事</h2>
                 <ul class="list-disc ml-5 space-y-1 text-primary">
@@ -1376,18 +1376,19 @@
 
         // 総合トップ3（scoreベース）
         (function renderTop3(){
+            function sanitizeName(s){ if(!s) return ''; let t=String(s); t=t.replace(/【[^】]*】/g,'').replace(/\[[^\]]*\]/g,'').replace(/\([^)]*\)/g,''); t=t.replace(/(先着|クーポン|OFF|割引|SALE|送料無料|即納|楽天一位|楽天1位|特価|限定|期間限定|在庫|最安|ポイント\d+倍)[^\s、，。】】]*/g,''); return t.replace(/\s+/g,' ').trim(); }
+            function compactTitle(name){ const cleaned=sanitizeName(name); return cleaned.length>36?(cleaned.slice(0,34)+'…'):cleaned; }
+            function shortDesc(p){ const src=(p.catchcopy&&p.catchcopy.trim().length>0)?p.catchcopy:(p.description||''); let t=src.replace(/【[^】]*】/g,'').replace(/\[[^\]]*\]/g,'').replace(/\([^)]*\)/g,''); t=t.replace(/(先着|クーポン|OFF|割引|SALE|送料無料|即納|楽天一位|楽天1位|特価|限定|期間限定|在庫|最安|ポイント\d+倍)[^\s、，。】】]*/g,''); t=t.replace(/\s+/g,' ').trim(); return t.length>42?(t.slice(0,40)+'…'):t; }
             const list = computeScores([...augmented]).sort((a,b)=> b.score - a.score).slice(0,3);
             const el = document.getElementById('top3-container');
             el.innerHTML = list.map((p, i) => `
                 <div class="bg-white rounded-2xl card-shadow card-shadow-hover transition-all transform-gpu">
                     <img src="${imgUrlWithSize(p.imageUrl, 640)}" srcset="${buildSrcset(p.imageUrl)}" sizes="(min-width:1024px) 320px, (min-width:768px) 30vw, 90vw" alt="${buildAlt(p)}" width="640" height="640" loading="${i === 0 ? 'eager' : 'lazy'}" decoding="async" class="rounded-t-2xl w-full object-contain bg-white" style="aspect-ratio: 1 / 1;">
                     <div class="p-5">
-                        <p class="text-xs text-gray-500">おすすめ</p>
-                        <h3 class="font-bold text-primary leading-tight mb-1">${p.itemName}</h3>
-                        <div class="flex items-center justify-between mb-3">
-                            <span class="text-lg font-bold text-accent">${formatPrice(p.itemPrice)}</span>
-                            <span class="badge-primary px-2 py-0.5 rounded-full" aria-label="平均評価 ${formatRating(p.reviewAverage)}">⭐ ${formatRating(p.reviewAverage)}</span>
-                        </div>
+                        <p class="text-xs text-muted mb-1">RANK ${i + 1}</p>
+                        <h3 class="font-bold text-primary leading-tight mb-1 line-clamp-2 text-base md:text-lg">${compactTitle(p.itemName)}</h3>
+                        <div class="text-xl font-bold text-accent mb-1">${formatPrice(p.itemPrice)}</div>
+                        <p class="text-sm text-gray-700 line-clamp-2 mb-3">${shortDesc(p)}</p>
                         <a href="#interactive-selection" class="block w-full text-center btn bg-accent text-white font-bold py-3 px-4 rounded-lg hover:opacity-95 transition" aria-label="商品一覧へ移動">商品一覧で詳しく見る</a>
                     </div>
                 </div>

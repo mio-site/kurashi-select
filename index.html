@@ -2,124 +2,286 @@
 <html lang="ja">
 <head>
     <meta charset="utf-8">
-    <title>暮らしセレクト - データで選ぶ、賢い選択</title>
+    <title>暮らしセレクト｜データで選ぶ、賢い選択</title>
 
-    <!-- SEO & Viewport Meta Tags (ご指定の内容を反映) -->
-    <meta name="description" content="暮らしの中の様々な選択を、データや実体験に基づいた客観的な情報でサポートするサイト『暮らしセレクト』のトップページです。ファッション、ライフスタイル、ガジェットなど、厳選された特集記事を掲載しています。">
-    <meta content='width=device-width,initial-scale=1.0,minimum-scale=1.0' name='viewport'/>
+    <!-- SEO & Viewport Meta Tags -->
+    <meta name="description" content="暮らしの中の様々な選択を、データと実体験に基づいた客観的な情報でサポート。ファッション・ライフスタイル・ガジェットの厳選特集を掲載。">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+    <meta name="theme-color" content="#2563EB">
+    <link rel="canonical" href="/index.html">
 
-    <!-- Icons (パスは環境に合わせて変更してください) -->
+    <!-- OGP / Twitter -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="kurashi-select">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="暮らしセレクト｜データで選ぶ、賢い選択">
+    <meta property="og:description" content="データと実体験で“最高の選択”をサポート。厳選された特集記事を掲載。">
+    <meta property="og:url" content="/index.html">
+    <meta property="og:image" content="./icon.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="暮らしセレクト｜データで選ぶ、賢い選択">
+    <meta name="twitter:description" content="データと実体験で“最高の選択”をサポート。厳選された特集記事を掲載。">
+    <meta name="twitter:image" content="./icon.png">
+
+    <!-- Icons & PWA -->
     <link rel="icon" type="image/png" href="./icon.png">
     <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
+    <link rel="manifest" href="./manifest.webmanifest">
 
-    <!-- Stylesheets (CSS 遅延読み込みを適用) -->
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 
-    <!-- Scripts (defer 属性を適用) -->
-    <script defer src="https://cdn.tailwindcss.com"></script>
+    <!-- Tailwind (初期描画に必要なため defer しない) -->
+    <script src="https://cdn.tailwindcss.com"></script>
 
     <style>
-        /* レイアウトシフト防止のため、基本的なスタイルはインラインで記述 */
+        :root {
+            --bg: #FAFAFA;
+            --text: #1A1A1A;
+            --primary: #2563EB; /* 青 */
+            --accent: #6B7280;  /* ニュートラル */
+            --card: #FFFFFF;
+            --muted: #4B5563;
+            --cta: #F59E0B;    /* 強調CTA */
+        }
+        .dark {
+            --bg: #0F172A;     /* slate-900 */
+            --text: #E5E7EB;   /* gray-200 */
+            --primary: #93C5FD;/* blue-300 */
+            --accent: #9CA3AF; /* gray-400 */
+            --card: #0B1220;
+            --muted: #CBD5E1;  /* slate-300: 暗背景で見やすく */
+            --cta: #F3B34D;
+        }
+        html { scroll-behavior: smooth; }
         body {
             font-family: 'Noto Sans JP', sans-serif;
-            background-color: #FDFBF8;
-            color: #4B423A;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.75;
+            font-size: 18px;
+            font-variant-numeric: tabular-nums;
         }
-        .font-display {
-            font-family: 'Playfair Display', serif;
-        }
-        .bg-primary { background-color: #A88767; }
-        .text-primary { color: #A88767; }
-        .border-primary { border-color: #A88767; }
-        .bg-accent { background-color: #8B7E74; }
-        .transition-all { transition: all 0.3s ease-in-out; }
-        .card-shadow { box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        .card-shadow-hover:hover { 
-            box-shadow: 0 10px 30px rgba(75, 66, 58, 0.1);
-            transform: translateY(-5px);
-        }
+        /* 文字の視認性を底上げ */
+        html, body { -webkit-text-size-adjust: 100%; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+        .font-display { font-family: 'Playfair Display', serif; }
+        .bg-primary { background-color: var(--primary); }
+        .text-primary { color: var(--primary); }
+        .border-primary { border-color: var(--primary); }
+        .bg-accent { background-color: var(--accent); }
+        .text-muted { color: var(--muted); }
+        .transition-all { transition: all .3s ease-in-out; }
+        .transform-gpu { transform: translateZ(0); }
+        .card-shadow { box-shadow: 0 8px 24px rgba(0,0,0,0.06); }
+        .card-shadow-hover:hover { box-shadow: 0 12px 28px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        /* ダーク時のカード視認性強化: 薄いリング + 深めの影 */
+        .dark .card-shadow { box-shadow: 0 0 0 1px rgba(148,163,184,0.22), 0 8px 28px rgba(0,0,0,0.55); }
+        .dark .card-shadow-hover:hover { box-shadow: 0 0 0 1px rgba(148,163,184,0.32), 0 20px 40px rgba(0,0,0,0.7); }
+        .btn-cta { background-color: var(--cta); color: #fff; }
+        /* 極小グローバルヘッダー */
+        .site-header { position: fixed; inset-inline: 0; top: 0; z-index: 60; backdrop-filter: saturate(180%) blur(12px); transition: transform .25s ease, background-color .2s ease; }
+        .dark .site-header { background-color: rgba(11, 18, 32, 0.72); }
+        .site-header { background-color: rgba(255,255,255,0.85); }
+        .site-header.hide { transform: translateY(-100%); }
+        .site-header-inner { display: flex; align-items: center; justify-content: space-between; gap: 12px; max-width: 1200px; margin: 0 auto; padding: 10px 16px; }
+        .site-logo { font-weight: 800; letter-spacing: .2px; }
+        .site-nav { display: none; gap: 12px; }
+        .site-nav a { display: inline-flex; align-items: center; padding: 8px 10px; border-radius: 9999px; text-decoration: none; font-size: 14px; }
+        @media (min-width: 768px){ .site-nav{ display: inline-flex; } }
+        body.has-header { padding-top: 56px; }
+        /* カード上部のビジュアル（グラデ） */
+        .card-visual { height: 140px; display:flex; align-items:center; justify-content:center; border-top-left-radius: 16px; border-top-right-radius: 16px; color:#fff; font-size: 42px; }
+        .grad-blue { background: linear-gradient(135deg, #2563EB 0%, #60A5FA 100%); }
+        .grad-green { background: linear-gradient(135deg, #059669 0%, #34D399 100%); }
+        .grad-purple { background: linear-gradient(135deg, #7C3AED 0%, #A78BFA 100%); }
+        .dark .bg-white { background-color: var(--card); }
+        .dark .text-gray-700 { color: #E2E8F0; } /* slate-200 */
+        .dark .text-gray-600 { color: var(--muted); }
+        .dark .text-gray-500 { color: #94A3B8; } /* slate-400 */
+        a { color: var(--primary); }
+        a:hover { text-decoration: underline; text-underline-offset: 2px; }
+        .site-nav a { color: inherit; text-decoration: none; }
+        .chip { display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border:1px solid #E5E7EB; border-radius:9999px; font-size:13px; background:#fff; color:#374151; }
+        .dark .chip { background: var(--card); color: var(--text); border-color: rgba(148,163,184,0.35); }
     </style>
 </head>
 
-<!-- 4. 読み込み完了後にbodyを表示するため、初期状態を非表示に -->
-<body class="antialiased" style="display: none;">
+<body id="top" class="antialiased" style="display:none;">
 
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
-
-        <header class="text-center mb-16 md:mb-20">
-            <h1 class="font-display text-5xl md:text-7xl font-bold text-primary mb-3">Kurashi Select</h1>
-            <p class="text-lg md:text-xl text-gray-600">データと実体験で、あなたの「最高の選択」をナビゲートします。</p>
-        </header>
-
-        <main>
-            <div class="max-w-4xl mx-auto text-center mb-12">
-                <h2 class="text-2xl md:text-3xl font-bold mb-4">最新の特集記事</h2>
-                <p class="text-base md:text-lg leading-relaxed">
-                    日々の暮らしを豊かにする、厳選された情報をお届けします。気になるテーマをクリックして、インタラクティブな体験をお楽しみください。
-                </p>
-            </div>
-
-            <!-- Articles Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10 max-w-6xl mx-auto">
-
-                <!-- Article Card 1 -->
-                <a href="./article/series001/001-001.html" class="block bg-white rounded-2xl card-shadow card-shadow-hover transition-all">
-                    <div class="p-6">
-                        <p class="text-sm text-primary font-bold mb-2">FASHION</p>
-                        <h3 class="text-xl font-bold text-gray-800 mb-3 h-20">【2025年最新】楽天レディースファッション・リアル売れ筋TOP10</h3>
-                        <p class="text-sm text-gray-600 leading-relaxed">
-                            データで読み解く「本当に売れてる」アイテム。価格・レビュー・人気度を分析し、あなたの価値観に合う最高の1着を見つけます。
-                        </p>
-                    </div>
-                    <div class="bg-gray-50 px-6 py-4 rounded-b-2xl">
-                        <span class="font-bold text-primary">記事を読む &rarr;</span>
-                    </div>
-                </a>
-
-                <!-- Article Card 2 -->
-                <a href="./article/series002/002-001.html" class="block bg-white rounded-2xl card-shadow card-shadow-hover transition-all">
-                    <div class="p-6">
-                        <p class="text-sm text-blue-600 font-bold mb-2">LIFESTYLE</p>
-                        <h3 class="text-xl font-bold text-gray-800 mb-3 h-20">【2025年版】大人の体型カバー水着、再定義</h3>
-                        <p class="text-sm text-gray-600 leading-relaxed">
-                            体型の悩みに寄り添い、自信を持って夏を楽しむための選択肢。アクティブ派もオシャレ派も満足できる賢い選び方をご提案します。
-                        </p>
-                    </div>
-                    <div class="bg-gray-50 px-6 py-4 rounded-b-2xl">
-                        <span class="font-bold text-blue-600">記事を読む &rarr;</span>
-                    </div>
-                </a>
-
-                <!-- Article Card 3 -->
-                <a href="./article/series003/003-001.html" class="block bg-white rounded-2xl card-shadow card-shadow-hover transition-all">
-                     <div class="p-6">
-                        <p class="text-sm text-accent font-bold mb-2">GADGET</p>
-                        <h3 class="text-xl font-bold text-gray-800 mb-3 h-20">【LDKベストバイ】MonomamスマートウォッチPrimo インタラクティブレビュー</h3>
-                        <p class="text-sm text-gray-600 leading-relaxed">
-                            『LDK』が認めた圧倒的コスパ。有名ブランドとの比較や本当に使える機能を、あなたの知りたいことに合わせて解説します。
-                        </p>
-                    </div>
-                    <div class="bg-gray-50 px-6 py-4 rounded-b-2xl">
-                        <span class="font-bold text-accent">記事を読む &rarr;</span>
-                    </div>
-                </a>
-
-            </div>
-        </main>
-
-        <footer class="text-center mt-20 md:mt-24">
-            <p class="text-sm text-gray-500">&copy; 2025 kurashi-select.github.io. All Rights Reserved.</p>
-        </footer>
-
+    <!-- 極小グローバルヘッダー（スクロールで隠れる） -->
+    <div id="site-header" class="site-header">
+        <div class="site-header-inner">
+            <a href="./index.html" class="site-logo text-primary">kurashi-select</a>
+            <nav class="site-nav" aria-label="グローバルナビ">
+                <a href="#articles">記事</a>
+                <a href="#about">About</a>
+                <button id="btn-dark-toggle" class="ml-2 bg-accent text-white px-3 py-2 rounded-lg" aria-pressed="false">🌙 ダーク</button>
+            </nav>
+        </div>
     </div>
 
-    <!-- 4. 読み込み完了後にbodyを表示するためのスクリプト -->
+    <main>
+        <!-- Hero -->
+        <section class="container mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-20 text-center">
+            <h1 class="font-display text-4xl md:text-6xl font-bold text-primary mb-3">Kurashi Select</h1>
+            <p class="text-lg md:text-2xl text-gray-700">データと実体験で、あなたの「最高の選択」をナビゲートします。</p>
+            <div class="mt-6 flex justify-center">
+                <a href="#articles" class="btn-cta font-bold py-3 px-6 rounded-full shadow hover:opacity-95">最新の特集へ</a>
+            </div>
+        </section>
+
+        <!-- Articles -->
+        <section id="articles" class="container mx-auto px-4 sm:px-6 lg:px-8 pb-14 md:pb-20">
+            <div class="max-w-4xl mx-auto text-center mb-10 md:mb-12">
+                <h2 class="text-2xl md:text-3xl font-bold mb-2">最新の特集記事</h2>
+                <p class="text-base md:text-lg text-gray-700">気になるテーマをクリックして、インタラクティブな体験をお楽しみください。</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10 max-w-6xl mx-auto">
+
+                <!-- Card 1 -->
+                <a href="./article/series001/001-001.html" class="block rounded-2xl card-shadow card-shadow-hover transition-all bg-white transform-gpu">
+                    <div class="card-visual grad-blue" aria-hidden="true">👗</div>
+                    <div class="p-6">
+                        <p class="text-xs font-bold text-primary mb-1">FASHION</p>
+                        <h3 class="text-lg md:text-xl font-bold leading-snug mb-2">【2025年最新】楽天レディースファッション・リアル売れ筋TOP10</h3>
+                        <p class="text-sm text-gray-600 mb-3">価格・評価・人気の総合で“外さない”一着を発見。</p>
+                        <div class="flex items-center justify-between">
+                            <span class="chip">インタラクティブ</span>
+                            <span class="font-bold text-primary">記事を読む →</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Card 2 -->
+                <a href="./article/series002/002-001.html" class="block rounded-2xl card-shadow card-shadow-hover transition-all bg-white transform-gpu">
+                    <div class="card-visual grad-green" aria-hidden="true">🏖️</div>
+                    <div class="p-6">
+                        <p class="text-xs font-bold text-green-600 mb-1">LIFESTYLE</p>
+                        <h3 class="text-lg md:text-xl font-bold leading-snug mb-2">【2025年版】大人の体型カバー水着、再定義</h3>
+                        <p class="text-sm text-gray-600 mb-3">自信が持てる着こなしへ。目的別の賢い選び方。</p>
+                        <div class="flex items-center justify-between">
+                            <span class="chip">サイズ/露出の不安に</span>
+                            <span class="font-bold text-green-600">記事を読む →</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Card 3 -->
+                <a href="./article/series003/003-001.html" class="block rounded-2xl card-shadow card-shadow-hover transition-all bg-white transform-gpu">
+                    <div class="card-visual grad-purple" aria-hidden="true">⌚</div>
+                    <div class="p-6">
+                        <p class="text-xs font-bold text-purple-600 mb-1">GADGET</p>
+                        <h3 class="text-lg md:text-xl font-bold leading-snug mb-2">【LDKベストバイ】MonomamスマートウォッチPrimo レビュー</h3>
+                        <p class="text-sm text-gray-600 mb-3">有名ブランド比較と“本当に使える”機能の見極め。</p>
+                        <div class="flex items-center justify-between">
+                            <span class="chip">徹底比較</span>
+                            <span class="font-bold text-purple-600">記事を読む →</span>
+                        </div>
+                    </div>
+                </a>
+
+            </div>
+        </section>
+
+        <!-- About -->
+        <section id="about" class="container mx-auto px-4 sm:px-6 lg:px-8 pb-16 md:pb-20">
+            <div class="max-w-4xl mx-auto bg-white dark:bg-opacity-80 backdrop-blur-sm p-5 md:p-6 rounded-2xl card-shadow">
+                <h2 class="text-xl md:text-2xl font-bold mb-3">暮らしセレクトとは</h2>
+                <p class="text-base text-gray-700">楽天ランキング等のデータと編集部の実体験をもとに、<strong>価格・評価・人気</strong>を客観的に整理。あなたの価値観に合う“後悔しない選択”をサポートします。</p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="text-center py-10">
+        <p class="text-sm text-gray-500">&copy; 2025 kurashi-select.github.io. All Rights Reserved.</p>
+    </footer>
+
+    <!-- Topへ戻る -->
+    <button id="btn-back-to-top" class="fixed right-4 bottom-4 btn-cta text-white px-4 py-3 rounded-full card-shadow-hover" aria-label="ページ上部へ戻る" style="display:none;">↑ トップ</button>
+
+    <!-- JSON-LD: WebSite + Organization -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "暮らしセレクト",
+      "url": "/",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "/?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "kurashi-select",
+      "url": "/",
+      "logo": "./icon.png"
+    }
+    </script>
+
     <script>
-        window.onload = function() {
-            document.body.style.display = "block";
+        // ------- Theme
+        const getTheme = () => localStorage.getItem('theme');
+        const setTheme = (t) => localStorage.setItem('theme', t);
+        const btnDarkToggle = document.getElementById('btn-dark-toggle');
+        const applyTheme = (t) => {
+            if (t === 'dark') document.documentElement.classList.add('dark');
+            else document.documentElement.classList.remove('dark');
+            if (btnDarkToggle) {
+                btnDarkToggle.textContent = document.documentElement.classList.contains('dark') ? '☀️ ライト' : '🌙 ダーク';
+                btnDarkToggle.setAttribute('aria-pressed', document.documentElement.classList.contains('dark'));
+            }
         };
+        applyTheme(getTheme() || 'light');
+        btnDarkToggle?.addEventListener('click', () => {
+            const isDark = document.documentElement.classList.toggle('dark');
+            setTheme(isDark ? 'dark' : 'light');
+            btnDarkToggle.textContent = isDark ? '☀️ ライト' : '🌙 ダーク';
+        });
+
+        // ------- 読み込み後の表示/ヘッダー/戻るボタン
+        window.onload = function() {
+            document.body.style.display = 'block';
+            document.body.classList.add('has-header');
+            // ヘッダー自動隠し
+            (function headerAutoHide(){
+                const header = document.getElementById('site-header');
+                if (!header) return;
+                let lastY = window.scrollY || 0;
+                let ticking = false;
+                window.addEventListener('scroll', () => {
+                    const y = window.scrollY || 0;
+                    if (!ticking) {
+                        window.requestAnimationFrame(() => {
+                            if (y > lastY && y > 80) header.classList.add('hide');
+                            else header.classList.remove('hide');
+                            lastY = y;
+                            ticking = false;
+                        });
+                        ticking = true;
+                    }
+                }, { passive: true });
+            })();
+            // Topへ戻る
+            (function toTop(){
+                const el = document.getElementById('btn-back-to-top');
+                if (!el) return;
+                el.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+                const toggle = () => { el.style.display = window.scrollY > 600 ? 'block' : 'none'; };
+                toggle();
+                window.addEventListener('scroll', toggle, { passive: true });
+            })();
+        };
+
+        // PWA: SW登録（存在しなければ無視）
+        if ('serviceWorker' in navigator) { navigator.serviceWorker.register('./sw.js').catch(()=>{}); }
     </script>
 </body>
 </html>
