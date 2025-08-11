@@ -122,7 +122,7 @@
         </div>
     </div>
 
-    <main>
+        <main>
         <!-- Hero -->
         <section class="container mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-20 text-center">
             <h1 class="font-display text-4xl md:text-6xl font-bold text-primary mb-3">Kurashi Select</h1>
@@ -134,56 +134,30 @@
 
         <!-- Articles -->
         <section id="articles" class="container mx-auto px-4 sm:px-6 lg:px-8 pb-14 md:pb-20">
-            <div class="max-w-4xl mx-auto text-center mb-10 md:mb-12">
+            <div class="max-w-4xl mx-auto text-center mb-8 md:mb-10">
                 <h2 class="text-2xl md:text-3xl font-bold mb-2">最新の特集記事</h2>
-                <p class="text-base md:text-lg text-gray-700">気になるテーマをクリックして、インタラクティブな体験をお楽しみください。</p>
+                <p class="text-base md:text-lg text-gray-700">シリーズの増加に合わせて、自動で最新記事を一覧表示します。</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10 max-w-6xl mx-auto">
-
-                <!-- Card 1 -->
-                <a href="./article/series001/001-001.html" class="block rounded-2xl card-shadow card-shadow-hover transition-all bg-white transform-gpu">
-                    <div class="card-visual grad-blue" aria-hidden="true">👗</div>
-                    <div class="p-6">
-                        <p class="text-xs font-bold text-primary mb-1">FASHION</p>
-                        <h3 class="text-lg md:text-xl font-bold leading-snug mb-2">【2025年最新】楽天レディースファッション・リアル売れ筋TOP10</h3>
-                        <p class="text-sm text-gray-600 mb-3">価格・評価・人気の総合で“外さない”一着を発見。</p>
-                        <div class="flex items-center justify-between">
-                            <span class="chip">インタラクティブ</span>
-                            <span class="font-bold text-primary">記事を読む →</span>
-                        </div>
+            <!-- ツールバー -->
+            <div class="max-w-6xl mx-auto mb-6">
+                <div class="flex flex-col sm:flex-row gap-3 sm:items-center">
+                    <div class="flex-1">
+                        <label for="index-search" class="block text-sm mb-1 text-muted">キーワード検索</label>
+                        <input id="index-search" type="search" placeholder="例: 水着, UV, ワンピース…" class="w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/50" />
                     </div>
-                </a>
-
-                <!-- Card 2 -->
-                <a href="./article/series002/002-001.html" class="block rounded-2xl card-shadow card-shadow-hover transition-all bg-white transform-gpu">
-                    <div class="card-visual grad-green" aria-hidden="true">🏖️</div>
-                    <div class="p-6">
-                        <p class="text-xs font-bold text-green-600 mb-1">LIFESTYLE</p>
-                        <h3 class="text-lg md:text-xl font-bold leading-snug mb-2">【2025年版】大人の体型カバー水着、再定義</h3>
-                        <p class="text-sm text-gray-600 mb-3">自信が持てる着こなしへ。目的別の賢い選び方。</p>
-                        <div class="flex items-center justify-between">
-                            <span class="chip">サイズ/露出の不安に</span>
-                            <span class="font-bold text-green-600">記事を読む →</span>
-                        </div>
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <button class="chip" data-filter-series="all" aria-pressed="true">すべて</button>
+                        <button class="chip" data-filter-series="series001">FASHION</button>
+                        <button class="chip" data-filter-series="series002">LIFESTYLE</button>
+                        <button class="chip" data-filter-series="series003">GADGET</button>
                     </div>
-                </a>
-
-                <!-- Card 3 -->
-                <a href="./article/series003/003-001.html" class="block rounded-2xl card-shadow card-shadow-hover transition-all bg-white transform-gpu">
-                    <div class="card-visual grad-purple" aria-hidden="true">⌚</div>
-                    <div class="p-6">
-                        <p class="text-xs font-bold text-purple-600 mb-1">GADGET</p>
-                        <h3 class="text-lg md:text-xl font-bold leading-snug mb-2">【LDKベストバイ】MonomamスマートウォッチPrimo レビュー</h3>
-                        <p class="text-sm text-gray-600 mb-3">有名ブランド比較と“本当に使える”機能の見極め。</p>
-                        <div class="flex items-center justify-between">
-                            <span class="chip">徹底比較</span>
-                            <span class="font-bold text-purple-600">記事を読む →</span>
-                        </div>
                     </div>
-                </a>
+                <div id="index-summary" class="text-xs text-muted mt-2"></div>
+                    </div>
 
-            </div>
+            <!-- ダイナミック記事グリッド -->
+            <div id="article-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10 max-w-6xl mx-auto"></div>
         </section>
 
         <!-- About -->
@@ -193,11 +167,11 @@
                 <p class="text-base text-gray-700">楽天ランキング等のデータと編集部の実体験をもとに、<strong>価格・評価・人気</strong>を客観的に整理。あなたの価値観に合う“後悔しない選択”をサポートします。</p>
             </div>
         </section>
-    </main>
+        </main>
 
     <footer class="text-center py-10">
-        <p class="text-sm text-gray-500">&copy; 2025 kurashi-select.github.io. All Rights Reserved.</p>
-    </footer>
+            <p class="text-sm text-gray-500">&copy; 2025 kurashi-select.github.io. All Rights Reserved.</p>
+        </footer>
 
     <!-- Topへ戻る -->
     <button id="btn-back-to-top" class="fixed right-4 bottom-4 btn-cta text-white px-4 py-3 rounded-full card-shadow-hover" aria-label="ページ上部へ戻る" style="display:none;">↑ トップ</button>
@@ -282,6 +256,106 @@
 
         // PWA: SW登録（存在しなければ無視）
         if ('serviceWorker' in navigator) { navigator.serviceWorker.register('./sw.js').catch(()=>{}); }
+
+        // ------- 記事カード 自動生成（series001: 001-001〜001-020 他も含む）
+        (function initIndexArticles(){
+            try {
+                const grid = document.getElementById('article-grid');
+                if (!grid) return;
+                // 対象シリーズと範囲を定義
+                const seriesDefs = [
+                    { key: 'series001', prefix: '001-', start: 1, end: 20, label: 'FASHION', grad: 'grad-blue', icon: '👗' },
+                    { key: 'series002', prefix: '002-', start: 1, end: 1,  label: 'LIFESTYLE', grad: 'grad-green', icon: '🏖️' },
+                    { key: 'series003', prefix: '003-', start: 1, end: 1,  label: 'GADGET',    grad: 'grad-purple', icon: '⌚' },
+                ];
+                // タイトルと説明の簡易辞書（必要に応じて拡充）
+                const titleMap = {
+                    'series001': '楽天レディース ファッション｜売れ筋TOP10',
+                    'series002': '大人の体型カバー水着、再定義',
+                    'series003': 'Monomam Primo スマートウォッチ レビュー',
+                };
+                const descMap = {
+                    'series001': '価格・評価・人気で“外さない”一着をデータで選ぶ',
+                    'series002': '自信が持てる着こなしへ。目的別の賢い選び方',
+                    'series003': '有名ブランド比較と“使える機能”の見極め',
+                };
+                // 実体を列挙
+                const items = [];
+                function pad3(n){ return String(n).padStart(3,'0'); }
+                seriesDefs.forEach(s => {
+                    for (let i = s.start; i <= s.end; i++) {
+                        const slug = `${s.prefix}${pad3(i)}`;
+                        const url = `./article/${s.key}/${slug}.html`;
+                        // ファイル存在チェックは静的サイトではできないため、そのまま列挙。
+                        items.push({
+                            url, series: s.key, label: s.label, grad: s.grad, icon: s.icon,
+                            title: `${titleMap[s.key]} #${pad3(i)}`,
+                            desc: `${descMap[s.key]}`,
+                        });
+                    }
+                });
+                // 最新順に見せたい場合は末尾が新しい前提で降順
+                items.reverse();
+
+                // 描画関数
+                function render(list){
+                    grid.innerHTML = list.map(item => `
+                        <a href="${item.url}" class="block rounded-2xl card-shadow card-shadow-hover transition-all bg-white transform-gpu">
+                            <div class="card-visual ${item.grad}" aria-hidden="true">${item.icon}</div>
+                            <div class="p-6">
+                                <p class="text-xs font-bold ${item.series==='series001'?'text-primary':(item.series==='series002'?'text-green-600':'text-purple-600')} mb-1">${item.label}</p>
+                                <h3 class="text-lg md:text-xl font-bold leading-snug mb-2">${item.title}</h3>
+                                <p class="text-sm text-gray-600 mb-3">${item.desc}</p>
+                                <div class="flex items-center justify-between">
+                                    <span class="chip">シリーズ</span>
+                                    <span class="font-bold ${item.series==='series001'?'text-primary':(item.series==='series002'?'text-green-600':'text-purple-600')}">記事を読む →</span>
+                                </div>
+                            </div>
+                        </a>
+                    `).join('');
+                    const sum = document.getElementById('index-summary');
+                    if (sum) sum.textContent = `${list.length} 件表示中`;
+                }
+
+                // 初期描画
+                render(items);
+
+                // フィルタ（シリーズ）
+                const toolbar = grid.parentElement?.previousElementSibling;
+                const seriesButtons = document.querySelectorAll('[data-filter-series]');
+                function setActiveSeriesButton(val){
+                    seriesButtons.forEach(b => b.classList.toggle('chip-selected', b.dataset.filterSeries === val));
+                    seriesButtons.forEach(b => b.setAttribute('aria-pressed', String(b.classList.contains('chip-selected'))));
+                }
+                seriesButtons.forEach(b => {
+                    b.addEventListener('click', () => {
+                        const series = b.dataset.filterSeries;
+                        const kw = (document.getElementById('index-search')?.value || '').trim().toLowerCase();
+                        const base = (series === 'all') ? items : items.filter(it => it.series === series);
+                        const filtered = kw ? base.filter(it => (it.title+it.desc).toLowerCase().includes(kw)) : base;
+                        setActiveSeriesButton(series);
+                        render(filtered);
+                    });
+                });
+                setActiveSeriesButton('all');
+
+                // キーワード検索
+                const search = document.getElementById('index-search');
+                if (search) {
+                    let t;
+                    search.addEventListener('input', () => {
+                        clearTimeout(t);
+                        t = setTimeout(() => {
+                            const kw = (search.value || '').trim().toLowerCase();
+                            const selected = document.querySelector('[data-filter-series].chip-selected')?.getAttribute('data-filter-series') || 'all';
+                            const base = (selected === 'all') ? items : items.filter(it => it.series === selected);
+                            const filtered = kw ? base.filter(it => (it.title+it.desc).toLowerCase().includes(kw)) : base;
+                            render(filtered);
+                        }, 250);
+                    });
+                }
+            } catch {}
+        })();
     </script>
 </body>
 </html>
